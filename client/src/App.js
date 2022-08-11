@@ -80,7 +80,7 @@ function App() {
     setQuestionToEdit({})
     setShowEditModal(false)
   }
-
+  // prepares the question data for new question when creating
   function changeFormData(event) {
     const name = event.target.name
     const value = event.target.value
@@ -103,37 +103,45 @@ function App() {
   async function addQuestion(event) {
     event.preventDefault()
 
-    // When a post request is sent to the create url, we'll add a new record to the database.
-    const newQuestion = { ...formData };
+      // When a post request is sent to the create url, we'll add a new record to the database.
+      const newQuestion = { ...formData };
+  
+      await fetch("http://localhost:5000/question/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newQuestion),
+      })
+      .catch(error => {
+        window.alert(error);
+        return;
+      });
+  
+      // clear inputs in create question modal
+      setFormData({
+        question:"",
+        questionType:"",
+        correctAnswer:"",
+        choices: {
+          choiceOne:"",
+          choiceTwo:"",
+          choiceThree:""
+        },
+        explanation: ""
+      });
+  
+      updateUI()
+  
+      alert("new question added")
+  }
 
-    await fetch("http://localhost:5000/question/add", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newQuestion),
-    })
-    .catch(error => {
-      window.alert(error);
-      return;
+  async function deleteQuestion(id) {
+    await fetch(`http://localhost:5000/question/delete/${id}`, {
+      method: "DELETE"
     });
-
-    // clear inputs in create question modal
-    setFormData({
-      question:"",
-      questionType:"",
-      correctAnswer:"",
-      choices: {
-        choiceOne:"",
-        choiceTwo:"",
-        choiceThree:""
-      },
-      explanation: ""
-    });
-
+    alert("question deleted");
     updateUI()
-
-    alert("new question added")
   }
 
 
@@ -160,7 +168,10 @@ function App() {
               updateUI={updateUI}
               />}
           <div className='table-container'>
-            <QuestionsTable questionsData={listOfQuestions} openEditQuestion={openEditQuestion}/>
+            {questionsCount.totalQuestions > 0 ? 
+            <QuestionsTable questionsData={listOfQuestions} 
+                openEditQuestion={openEditQuestion}
+                handleDelete={deleteQuestion}/> : <h3>This looks empty, Start making question now.</h3>}
           </div>
         </div>
       </main>

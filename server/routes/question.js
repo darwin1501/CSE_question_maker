@@ -51,6 +51,18 @@ recordRoutes.route("/question/:id").get(function (req, res) {
       });
 });
 
+// This section will help you get a single record by question
+recordRoutes.route("/question/:question").get(function (req, res) {
+  let db_connect = dbo.getDb();
+  let myquery = { question: req.params.question};
+  db_connect
+      .collection("questions")
+      .findOne(myquery, function (err, result) {
+        if (err) throw err;
+        res.json(result);
+      });
+});
+
 // This section will help you update a record by id.
 recordRoutes.route("/question/update/:id").post(function (req, response) {
   let db_connect = dbo.getDb();
@@ -72,5 +84,19 @@ recordRoutes.route("/question/update/:id").post(function (req, response) {
       response.json(res);
     });
 });
+
+// This section will help you delete a record
+recordRoutes.route("/question/delete/:id").delete((req, res)=>{
+  let db_connect = dbo.getDb()
+  let myQuery = { _id: ObjectId(req.params.id) }
+
+  db_connect
+      .collection("questions")
+      .deleteOne(myQuery, (err, obj)=>{
+          if(err) throw err
+          console.log("1 document deleted")
+          res.json(obj)
+      })
+})
 
   module.exports = recordRoutes
