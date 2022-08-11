@@ -8,9 +8,10 @@ export default function questionsTable(props){
 
     const questionList = props.questionsData.map((data)=>{
         return{
+            id: data._id,
             question: data.question,
             questionType: data.questionType,
-            action: "button"
+            action: <p className="btn-in-table" onClick={()=>props.openEditQuestion(data._id)}>Edit</p>
         }
     })
 
@@ -24,6 +25,7 @@ export default function questionsTable(props){
     }
 
     const columns = [
+        {dataField: "id", text: "ID"},
         {dataField: "question", text: "Question",
         style: columnStyle},
         {dataField: "questionType", text: "Question Type"},

@@ -4,8 +4,8 @@ export default function CreateQuestion(props) {
 
     return(
         <div>
-            <div className="create-question-modal">
-                <div className="create-question-modal-content">
+            <div className="modal-container">
+                    <div className="card-modal-content">
                     <div style={{
                         display: "flex",
                         justifyContent: "flex-end",
@@ -58,7 +58,7 @@ export default function CreateQuestion(props) {
                         </label>
                         <input type="submit" value="Create" />
                     </form>
-                </div>
+                    </div>
             </div>
         </div>
     )

@@ -7,9 +7,17 @@ body{
 .card{
   border-radius: 5px;
 }
-.create-question-modal{
+.card-modal-content{
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 400px;
+  height: 500px;
+}
+.modal-container{
   position: fixed; /* Stay in place */
-  z-index: 5 !important; /* Sit on top */
+  z-index: 5 !important; /*Sit on top */
   padding-top: 100px; /* Location of the box */
   left: 0;
   top: 0;
@@ -19,13 +27,22 @@ body{
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
-.create-question-modal-content{
+/* .modal-content{
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 40%;
+  width: 400px;
   height: 500px;
+} */
+form{
+  display: block !important;
+}
+.btn-in-table{
+  cursor: pointer;
+}
+.btn-in-table:hover{
+  text-decoration: underline;
 }
 h1, h2{
   margin: 0

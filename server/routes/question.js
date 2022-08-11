@@ -39,4 +39,38 @@ recordRoutes.route("/question/add").post(function (req, response) {
   });
 });
 
+// This section will help you get a single record by id
+recordRoutes.route("/question/:id").get(function (req, res) {
+  let db_connect = dbo.getDb();
+  let myquery = { _id: ObjectId( req.params.id )};
+  db_connect
+      .collection("questions")
+      .findOne(myquery, function (err, result) {
+        if (err) throw err;
+        res.json(result);
+      });
+});
+
+// This section will help you update a record by id.
+recordRoutes.route("/question/update/:id").post(function (req, response) {
+  let db_connect = dbo.getDb();
+  let myquery = { _id: ObjectId( req.params.id )};
+  let newvalues = {
+    $set: {
+      choices: req.body.choices,
+      correctAnswer: req.body.correctAnswer,
+      explanation: req.body.explanation,
+      questionType: req.body.questionType,
+      question: req.body.question
+    },
+  };
+  db_connect
+    .collection("questions")
+    .updateOne(myquery, newvalues, function (err, res) {
+      if (err) throw err;
+      console.log("1 document updated");
+      response.json(res);
+    });
+});
+
   module.exports = recordRoutes

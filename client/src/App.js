@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import QuestionsTable from './components/QuestionTable';
 import CreateQuestion from './components/CreateQuestion';
+import EditQuestion from './components/EditQuestion';
 
 function App() {
 
@@ -9,7 +10,6 @@ function App() {
   const [questionsCount, setQuestionsCount] = React.useState({
     totalQuestions: 0
   })
-
   const [formData, setFormData] = React.useState({
       question:"",
       questionType:"",
@@ -21,12 +21,11 @@ function App() {
       },
       explanation: ""     
   })
-// state for deciding wethere to show or hide modal to create question
-  const [showCreate, setShowCreate] = React.useState(false)
-
-  const [listOfQuestions, setListOfQuestions] = React.useState([{}])
-
+  const [showCreateModal, setShowCreateModal] = React.useState(false);
+  const [showEditModal, setShowEditModal] = React.useState(false);
+  const [listOfQuestions, setListOfQuestions] = React.useState([{}]);
   const [isUpdateUI, setIsUpdateUI] = React.useState(false);
+  const [questionToEdit, setQuestionToEdit] = React.useState({})
 
   React.useEffect(()=>{
 
@@ -52,12 +51,40 @@ function App() {
   }, [isUpdateUI])  
 
   function toogleCreateQuestion() {
-    setShowCreate(showCreate ? false:true)
+    setShowCreateModal(showCreateModal ? false:true)
+  }
+
+  function openEditQuestion(id) {
+    async function fetchData() {
+            
+      const response = await fetch(`http://localhost:5000/question/${id}`);
+
+      if (!response.ok) {
+        const message = `An error has occured: ${response.statusText}`;
+        window.alert(message);
+        return;
+      }
+      const record = await response.json();
+
+      if (!record) {
+        window.alert(`Record with id ${id} not found`);
+        return;
+      }
+      setQuestionToEdit(record)
+      setShowEditModal(true)
+    }
+    fetchData();
+  }
+
+  function closeEditQuestion() {
+    setQuestionToEdit({})
+    setShowEditModal(false)
   }
 
   function changeFormData(event) {
     const name = event.target.name
     const value = event.target.value
+    
     if(name === "choiceOne" || name === "choiceTwo" || name === "choiceThree"){
       setFormData((prev)=>{
         return{...prev, choices:{...prev.choices, [name]:value}}
@@ -67,7 +94,10 @@ function App() {
         return{...prev, [name]:value}
       })
     }
-    
+  }
+
+  function updateUI(){
+    setIsUpdateUI(isUpdateUI ? false: true)
   }
 
   async function addQuestion(event) {
@@ -101,7 +131,7 @@ function App() {
       explanation: ""
     });
 
-    setIsUpdateUI(isUpdateUI ? false: true)
+    updateUI()
 
     alert("new question added")
   }
@@ -118,14 +148,19 @@ function App() {
           <button onClick={toogleCreateQuestion}>
             Create Question
           </button>
-            { showCreate && <CreateQuestion 
+            { showCreateModal && <CreateQuestion 
               toogleClose={toogleCreateQuestion} 
               handleChange={changeFormData}
               onSubmit={addQuestion}
               value={formData}
               /> }
+            {showEditModal && <EditQuestion 
+              closeEditQuestion={closeEditQuestion}
+              question={questionToEdit}
+              updateUI={updateUI}
+              />}
           <div className='table-container'>
-            <QuestionsTable questionsData={listOfQuestions}/>
+            <QuestionsTable questionsData={listOfQuestions} openEditQuestion={openEditQuestion}/>
           </div>
         </div>
       </main>
