@@ -52,7 +52,7 @@ recordRoutes.route("/question/:id").get(function (req, res) {
 });
 
 // This section will help you get a single record by question
-recordRoutes.route("/question/:question").get(function (req, res) {
+recordRoutes.route("/question/find/:question").get(function (req, res) {
   let db_connect = dbo.getDb();
   let myquery = { question: req.params.question};
   db_connect
