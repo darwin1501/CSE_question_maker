@@ -96,52 +96,134 @@ function App() {
     }
   }
 
+  function formatFormData(event) {
+    const name = event.target.name
+    const value = event.target.value.trim()
+    
+    if(name === "choiceOne" || name === "choiceTwo" || name === "choiceThree"){
+      setFormData((prev)=>{
+        return{...prev, choices:{...prev.choices, [name]:value}}
+      })
+    }else{
+      setFormData((prev)=>{
+        return{...prev, [name]:value}
+      })
+    }
+  }
+
   function updateUI(){
     setIsUpdateUI(isUpdateUI ? false: true)
+  }
+
+  async function hasQuestionDuplicate(question) {
+    const response = await fetch(`http://localhost:5000/question/find/${question}`);
+
+      if (!response.ok) {
+        const message = `An error has occured: ${response.statusText}`;
+        window.alert(message);
+        return;
+      }
+      const record = await response.json();
+
+      if (!record) {
+        return false
+      }else{
+        return true
+      }
   }
 
   async function addQuestion(event) {
     event.preventDefault()
 
-      // When a post request is sent to the create url, we'll add a new record to the database.
+// When a post request is sent to the create url, we'll add a new record to the database.
       const newQuestion = { ...formData };
-  
-      await fetch("http://localhost:5000/question/add", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newQuestion),
-      })
-      .catch(error => {
-        window.alert(error);
-        return;
-      });
-  
-      // clear inputs in create question modal
-      setFormData({
-        question:"",
-        questionType:"",
-        correctAnswer:"",
-        choices: {
-          choiceOne:"",
-          choiceTwo:"",
-          choiceThree:""
-        },
-        explanation: ""
-      });
-  
-      updateUI()
-  
-      alert("new question added")
+      const isQuestionExist = await hasQuestionDuplicate(newQuestion.question)
+
+      if(isQuestionExist === true){
+        alert("Erro: Question already exists")
+      }else{
+        console.log("You may now create this question")
+        // insert new question if there's no empty string in object properties
+        if(hasEmptyString(newQuestion) !== true) {
+          await fetch("http://localhost:5000/question/add", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newQuestion),
+          })
+          .catch(error => {
+            window.alert(error);
+            return;
+          });
+      
+          // clear inputs in create question modal
+          setFormData({
+            question:"",
+            questionType:"",
+            correctAnswer:"",
+            choices: {
+              choiceOne:"",
+              choiceTwo:"",
+              choiceThree:""
+            },
+            explanation: ""
+          });
+      
+          updateUI()
+      
+          alert("new question added")
+        }else{
+          alert("Error: Can't create question, please fill-out all fields in form ")
+        }
+      }
   }
 
   async function deleteQuestion(id) {
-    await fetch(`http://localhost:5000/question/delete/${id}`, {
-      method: "DELETE"
-    });
-    alert("question deleted");
-    updateUI()
+
+    // eslint-disable-next-line no-restricted-globals
+    const confirmation = confirm("Do you want to delete this?")
+    
+    if(confirmation === true){
+      await fetch(`http://localhost:5000/question/delete/${id}`, {
+        method: "DELETE"
+      });
+      alert("question deleted");
+      updateUI()
+    }
+  }
+
+  /*checks if the object property has an empty string
+  * it also checks the object properties inside an object properties. */
+  function hasEmptyString(dataObject){
+    const hasEmptyProperty = []
+
+    // check each object property if they have empty string.
+    for (const [, value] of Object.entries(dataObject)) {
+    // if property is an object then check its property also if they have empty string.
+      if(typeof value === "object"){ 
+        const object = value
+        for (const [, value] of Object.entries(object)) {
+          if(value === ""){
+            hasEmptyProperty.push(true)
+          }else{
+            hasEmptyProperty.push(false)
+          }
+        } 
+      }else{
+        if(value === ""){
+          hasEmptyProperty.push(true)
+        }else{
+          hasEmptyProperty.push(false)
+        }
+      }
+    }
+  
+    if(hasEmptyProperty.includes(true) === true){
+      return true
+    }else{
+      return false
+    }
   }
 
 
@@ -160,12 +242,15 @@ function App() {
               toogleClose={toogleCreateQuestion} 
               handleChange={changeFormData}
               onSubmit={addQuestion}
+              formatFormData={formatFormData}
               value={formData}
+              
               /> }
             {showEditModal && <EditQuestion 
               closeEditQuestion={closeEditQuestion}
               question={questionToEdit}
               updateUI={updateUI}
+              questionDuplicate={hasQuestionDuplicate}
               />}
           <div className='table-container'>
             {questionsCount.totalQuestions > 0 ? 
