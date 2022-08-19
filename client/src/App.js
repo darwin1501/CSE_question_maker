@@ -19,13 +19,15 @@ function App() {
         choiceTwo:"",
         choiceThree:""
       },
-      explanation: ""     
+      explanation: "",
+      dateModified: new Date()   
   })
   const [showCreateModal, setShowCreateModal] = React.useState(false);
   const [showEditModal, setShowEditModal] = React.useState(false);
   const [listOfQuestions, setListOfQuestions] = React.useState([{}]);
   const [isUpdateUI, setIsUpdateUI] = React.useState(false);
-  const [questionToEdit, setQuestionToEdit] = React.useState({})
+  const [questionToEdit, setQuestionToEdit] = React.useState({});
+  const [tableQuestionCount, setTableQuestionCount] = React.useState(0);
 
   React.useEffect(()=>{
 
@@ -43,7 +45,9 @@ function App() {
         return {...prev, totalQuestions: Object.keys(questions).length}
       })
 
-      setListOfQuestions(questions)
+      setTableQuestionCount(Object.keys(questions).length)
+
+      setListOfQuestions(questions)      
     }
     getQuestions()
 
@@ -87,11 +91,11 @@ function App() {
     
     if(name === "choiceOne" || name === "choiceTwo" || name === "choiceThree"){
       setFormData((prev)=>{
-        return{...prev, choices:{...prev.choices, [name]:value}}
+        return{...prev, choices:{...prev.choices, [name]:value}, dateModified: new Date()}
       })
     }else{
       setFormData((prev)=>{
-        return{...prev, [name]:value}
+        return{...prev, [name]:value, dateModified: new Date()}
       })
     }
   }
@@ -135,12 +139,12 @@ function App() {
   async function addQuestion(event) {
     event.preventDefault()
 
-// When a post request is sent to the create url, we'll add a new record to the database.
+    // When a post request is sent to the create url, we'll add a new record to the database.
       const newQuestion = { ...formData };
       const isQuestionExist = await hasQuestionDuplicate(newQuestion.question)
 
       if(isQuestionExist === true){
-        alert("Erro: Question already exists")
+        alert("Error: Question already exists")
       }else{
         console.log("You may now create this question")
         // insert new question if there's no empty string in object properties
@@ -156,7 +160,7 @@ function App() {
             window.alert(error);
             return;
           });
-      
+
           // clear inputs in create question modal
           setFormData({
             question:"",
@@ -167,7 +171,8 @@ function App() {
               choiceTwo:"",
               choiceThree:""
             },
-            explanation: ""
+            explanation: "",
+            dateModified: new Date()
           });
       
           updateUI()
@@ -226,6 +231,31 @@ function App() {
     }
   }
 
+  async function findQuestion(event){
+    const question = event.target.value
+    if(question !== ""){
+      const response = await fetch(`http://localhost:5000/questions/search/${question}`)
+
+      if (!response.ok) {
+        const message = `An error has occured: ${response.statusText}`;
+        window.alert(message);
+        return;
+      }
+
+      const record = await response.json();
+      const resultCount = Object.keys(record).length
+
+      if( resultCount > 0){
+        setListOfQuestions(record)
+        setTableQuestionCount(resultCount)
+      }else{
+        setTableQuestionCount(0)
+      }
+    }else{
+      updateUI()
+    }
+
+  }
 
   return (
     <div className="App">
@@ -238,6 +268,9 @@ function App() {
           <button onClick={toogleCreateQuestion}>
             Create Question
           </button>
+          <br></br>
+          <br></br>
+            <input type="text" placeholder="Search a question" onInput={findQuestion}/>
             { showCreateModal && <CreateQuestion 
               toogleClose={toogleCreateQuestion} 
               handleChange={changeFormData}
@@ -253,10 +286,13 @@ function App() {
               questionDuplicate={hasQuestionDuplicate}
               />}
           <div className='table-container'>
-            {questionsCount.totalQuestions > 0 ? 
-            <QuestionsTable questionsData={listOfQuestions} 
+            {
+              questionsCount.totalQuestions > 0 && tableQuestionCount > 0? 
+              <QuestionsTable questionsData={listOfQuestions} 
                 openEditQuestion={openEditQuestion}
-                handleDelete={deleteQuestion}/> : <h3>This looks empty, Start making question now.</h3>}
+                handleDelete={deleteQuestion}/> 
+                : <h3>No questions to show at this moment</h3>
+            }
           </div>
         </div>
       </main>

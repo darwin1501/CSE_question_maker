@@ -44,11 +44,11 @@ export default function EditQuestion(props) {
     
     if(name === "choiceOne" || name === "choiceTwo" || name === "choiceThree"){
       setFormData((prev)=>{
-        return{...prev, choices:{...prev.choices, [name]:value}}
+        return{...prev, choices:{...prev.choices, [name]:value}, dateModified: new Date()}
       })
     }else{
       setFormData((prev)=>{
-        return{...prev, [name]:value}
+        return{...prev, [name]:value, dateModified: new Date()}
       })
     }
   }

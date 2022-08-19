@@ -31,7 +31,8 @@ recordRoutes.route("/question/add").post(function (req, response) {
     correctAnswer: req.body.correctAnswer,
     explanation: req.body.explanation,
     questionType: req.body.questionType,
-    question: req.body.question
+    question: req.body.question,
+    dateModified: req.body.dateModified
   };
   db_connect.collection("questions").insertOne(myobj, function (err, res) {
     if (err) throw err;
@@ -63,6 +64,30 @@ recordRoutes.route("/question/find/:question").get(function (req, res) {
       });
 });
 
+// This section will help you get questions related to search field vaue
+recordRoutes.route("/questions/search/:question").get(function (req, res) {
+  let db_connect = dbo.getDb();
+
+    const myQuery = [
+    {
+      $search: {
+        index: 'question',
+        phrase: {
+          query: req.params.question,
+          path: "question"
+        }
+      }
+    }
+  ]
+
+  db_connect
+  .collection("questions")
+  .aggregate(myQuery).toArray(function(err, result) {
+    if (err) throw err;
+    res.json(result);
+  });;
+});
+
 // This section will help you update a record by id.
 recordRoutes.route("/question/update/:id").post(function (req, response) {
   let db_connect = dbo.getDb();
@@ -73,7 +98,8 @@ recordRoutes.route("/question/update/:id").post(function (req, response) {
       correctAnswer: req.body.correctAnswer,
       explanation: req.body.explanation,
       questionType: req.body.questionType,
-      question: req.body.question
+      question: req.body.question,
+      dateModified: req.body.dateModified
     },
   };
   db_connect
