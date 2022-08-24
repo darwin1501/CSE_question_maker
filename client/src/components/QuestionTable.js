@@ -4,11 +4,11 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.css"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css"
 import paginationFactory from "react-bootstrap-table2-paginator"
+import { Link } from "react-router-dom"
 
 export default function questionsTable(props){
 
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         const questionList = props.questionsData.map((data)=>{
         const questionDate = new Date(Date.parse(data.dateModified))
         const month = months[questionDate.getMonth()]
@@ -24,6 +24,11 @@ export default function questionsTable(props){
                 <div style={{display: "flex", justifyContent: "center", alignItems:"center", gap: "15px"}}>
                     <p className="btn-in-table" onClick={()=>props.openEditQuestion(data._id)}>Edit</p>
                     <p className="btn-in-table" onClick={()=>props.handleDelete(data._id)}>Delete</p>
+                    <Link 
+                        to={`preview/${data._id}`} 
+                        target="_blank">
+                        <p className="btn-in-table">Preview</p>
+                    </Link>
                 </div>
         }
     })

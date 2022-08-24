@@ -97,6 +97,8 @@ function App() {
       setFormData((prev)=>{
         return{...prev, [name]:value, dateModified: new Date()}
       })
+
+      
     }
   }
 

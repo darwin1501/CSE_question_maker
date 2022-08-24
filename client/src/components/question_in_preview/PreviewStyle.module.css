@@ -1,0 +1,51 @@
+
+.bg{
+    background-color: #f5bf99;;
+    position:absolute;
+    top:0px;
+    right:0px;
+    bottom:0px;
+    left:0px;
+    overflow-y: scroll;
+}
+.btn_select{
+    padding: 10px;
+    border-radius: 5px;
+    border:solid black 2px; 
+    width: 200px;
+    cursor: pointer;
+    text-align: center;
+    background-color: #f5bf99;
+}
+.btn_select:hover{
+    background-color: white;
+}
+.btn_select:focus{
+    background-color: white;
+}
+.container{
+    width: 90%;
+    margin: 10vh auto;
+}
+.explanation_container{
+    background-color: #db8d55;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 40px;
+}
+.flex_center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.flex_start{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.question_text{
+    font-weight: bolder;
+    font-size: 20px;
+    margin: 0;
+    text-align: left;
+}
