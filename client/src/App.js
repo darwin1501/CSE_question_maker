@@ -3,9 +3,9 @@ import './App.css';
 import QuestionsTable from './components/QuestionTable';
 import CreateQuestion from './components/CreateQuestion';
 import EditQuestion from './components/EditQuestion';
+import ungrouped_question from './utility_module/ungrouped_question';
 
 function App() {
-
   // question count for all questions, and sub category
   const [questionsCount, setQuestionsCount] = React.useState({
     totalQuestions: 0
@@ -28,6 +28,7 @@ function App() {
   const [isUpdateUI, setIsUpdateUI] = React.useState(false);
   const [questionToEdit, setQuestionToEdit] = React.useState({});
   const [tableQuestionCount, setTableQuestionCount] = React.useState(0);
+  const [changeQuestionToGroup, setChangeQuestionToGroup] = React.useState(false)
 
   React.useEffect(()=>{
 
@@ -115,6 +116,10 @@ function App() {
         return{...prev, [name]:value}
       })
     }
+  }
+
+  function swtichQuestion(){
+    setChangeQuestionToGroup(!changeQuestionToGroup)
   }
 
   function updateUI(){
@@ -267,26 +272,41 @@ function App() {
               <h4>Total Question</h4>
               <h2>{questionsCount.totalQuestions}</h2>
           </div>
-          <button onClick={toogleCreateQuestion}>
-            Create Question
-          </button>
+          { 
+            changeQuestionToGroup ? 
+            <button onClick={toogleCreateQuestion}>
+                Create Group Question
+            </button>
+            :
+            <button onClick={toogleCreateQuestion}>
+              Create Question
+            </button>
+          }
           <br></br>
           <br></br>
+          {
+            changeQuestionToGroup ?
+            <input type="text" placeholder="Search a group name"/>  :
             <input type="text" placeholder="Search a question" onInput={findQuestion}/>
+          }
             { showCreateModal && <CreateQuestion 
               toogleClose={toogleCreateQuestion} 
               handleChange={changeFormData}
               onSubmit={addQuestion}
               formatFormData={formatFormData}
-              value={formData}
-              
-              /> }
+              value={formData} /> }
+            <button onClick={swtichQuestion}>
+              Switch to
+              {
+                changeQuestionToGroup ? ' Ungrouped ' : ' Grouped  '
+              }
+              Question
+            </button>
             {showEditModal && <EditQuestion 
               closeEditQuestion={closeEditQuestion}
               question={questionToEdit}
               updateUI={updateUI}
-              questionDuplicate={hasQuestionDuplicate}
-              />}
+              questionDuplicate={hasQuestionDuplicate}/>}
           <div className='table-container'>
             {
               questionsCount.totalQuestions > 0 && tableQuestionCount > 0? 
