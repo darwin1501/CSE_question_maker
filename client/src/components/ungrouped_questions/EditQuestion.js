@@ -1,70 +1,72 @@
 import React from 'react';
+import Checker from '../../utility_module/checker';
 
 export default function EditQuestion(props) {
 
-   const [formData, setFormData] = React.useState(props.question)
-   const [prevQuestion] = React.useState(props.question)
+   const [formData, setFormData] = React.useState(props.question);
+   const [prevQuestion] = React.useState(props.question);
 
     async function updateQuestion(event) {
-    event.preventDefault()
-      const hasDuplicateQuestion = await props.questionDuplicate(formData.question)
-      let updateThis = true
+      event.preventDefault();
 
-    // if question is not modified ignore duplicate checking
-    if(prevQuestion.question === formData.question){
-      updateThis = true
-    }else{
-      if(hasDuplicateQuestion === true){
-        updateThis = false
+      const isQuestionExist = await Checker.hasQuestionDuplicate(formData.question);
+      let updateThis = null;
+
+      // if question is not modified ignore duplicate checking
+      if(prevQuestion.question === formData.question){
+        updateThis = true;
       }else{
-        updateThis = true
+        if(isQuestionExist === true){
+          updateThis = false;
+        }else{
+          updateThis = true;
+        }
       }
-    }
 
-    if(updateThis === true){
-      // This will send a post request to update the data in the database.
-      await fetch(`http://localhost:5000/question/update/${formData._id}`, {
-        method: "POST",
-        body: JSON.stringify(formData),
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      });
-      alert("Question Updated")
-      
-      props.updateUI()
-    }else{
-      alert("Error: Question Already Exists")
-    }
+      if(updateThis === true){
+        // This will send a post request to update the data in the database.
+        await fetch(`http://localhost:5000/question/update/${formData._id}`, {
+          method: "POST",
+          body: JSON.stringify(formData),
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        });
+        alert("Question Updated");
+        
+        props.updateUI();
+      }else{
+        alert("Error: Question Already Exists");
+      }
   }
 
   function changeFormData(event) {
-    const name = event.target.name
-    const value = event.target.value
+    const name = event.target.name;
+    const value = event.target.value;
     
     if(name === "choiceOne" || name === "choiceTwo" || name === "choiceThree"){
       setFormData((prev)=>{
-        return{...prev, choices:{...prev.choices, [name]:value}, dateModified: new Date()}
+        return{...prev, choices:{...prev.choices, [name]:value}, dateModified: new Date()};
       })
     }else{
       setFormData((prev)=>{
-        return{...prev, [name]:value, dateModified: new Date()}
+        return{...prev, [name]:value, dateModified: new Date()};
       })
     }
   }
 
   function formatFormData(event) {
-    const name = event.target.name
-    const value = event.target.value.trim()
+    const name = event.target.name;
+    const value = event.target.value.trim();
     
     if(name === "choiceOne" || name === "choiceTwo" || name === "choiceThree"){
       setFormData((prev)=>{
-        return{...prev, choices:{...prev.choices, [name]:value}}
-      })
+        return{...prev, choices:{...prev.choices, [name]:value}};
+      });
     }else{
       setFormData((prev)=>{
-        return{...prev, [name]:value}
-      })
+        return{...prev, [name]:value};
+      });
     }
   }
 
@@ -127,5 +129,5 @@ export default function EditQuestion(props) {
                     </div>
             </div>
         </div>
-    )
+    );
 }

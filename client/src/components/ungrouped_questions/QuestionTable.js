@@ -1,19 +1,34 @@
-import React from "react"
-import BootstrapTable from "react-bootstrap-table-next"
-import "react-bootstrap-table-next/dist/react-bootstrap-table2.css"
-import "bootstrap/dist/css/bootstrap.min.css"
-import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css"
-import paginationFactory from "react-bootstrap-table2-paginator"
-import { Link } from "react-router-dom"
+import React from "react";
+import BootstrapTable from "react-bootstrap-table-next";
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import { Link } from "react-router-dom";
 
 export default function questionsTable(props){
 
-        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        console.log(props.questionsData)
+
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         const questionList = props.questionsData.map((data)=>{
-        const questionDate = new Date(Date.parse(data.dateModified))
-        const month = months[questionDate.getMonth()]
-        const date = questionDate.getDate()
-        const year = questionDate.getFullYear()
+        const questionDate = new Date(Date.parse(data.dateModified));
+        const month = months[questionDate.getMonth()];
+        const date = questionDate.getDate();
+        const year = questionDate.getFullYear();
+
+        async function deleteQuestion(id) {
+            // eslint-disable-next-line no-restricted-globals
+            const confirmation = confirm("Do you want to delete this?");
+            
+            if(confirmation === true){
+              await fetch(`http://localhost:5000/question/delete/${id}`, {
+                method: "DELETE"
+              });
+              alert("question deleted");
+              props.updateUI();
+            }
+          }
 
         return{
             id: data._id,
@@ -23,7 +38,7 @@ export default function questionsTable(props){
             action: 
                 <div style={{display: "flex", justifyContent: "center", alignItems:"center", gap: "15px"}}>
                     <p className="btn-in-table" onClick={()=>props.openEditQuestion(data._id)}>Edit</p>
-                    <p className="btn-in-table" onClick={()=>props.handleDelete(data._id)}>Delete</p>
+                    <p className="btn-in-table" onClick={()=>deleteQuestion(data._id)}>Delete</p>
                     <Link 
                         to={`preview/${data._id}`} 
                         target="_blank">

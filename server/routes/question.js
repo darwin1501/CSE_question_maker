@@ -17,6 +17,7 @@ recordRoutes.route("/questions").get(function (req, res) {
     db_connect
       .collection("questions")
       .find({})
+      .sort({dateModified: -1})
       .toArray(function (err, result) {
         if (err) throw err;
         res.json(result);
