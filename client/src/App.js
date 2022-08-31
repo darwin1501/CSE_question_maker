@@ -11,14 +11,14 @@ function App() {
   const [questionsCount, setQuestionsCount] = React.useState({
     totalQuestions: 0
   });
-  const [showCreateModal, setShowCreateModal] = React.useState(false);
+  const [showCreateUngroupedQuestion, setShowCreateUngroupedQuestion] = React.useState(false);
   const [showCreateGroupedQuestion, setshowCreateGroupedQuestion] = React.useState(false);
-  const [showEditModal, setShowEditModal] = React.useState(false);
+  const [showEditUngroupedQuestion, setShowEditUngroupedQuestion] = React.useState(false);
   const [ungroupedQuestions, setListOfQuestions] = React.useState([{}]);
   const [groupedQuestions, setGroupedQuestions] = React.useState([])
   const [UngroupedTableUiUpdate, setUngroupedTableUiUpdate] = React.useState(false);
   const [GroupTableUiUpdate, setGroupTableUiUpdate] = React.useState(false);
-  const [questionToEdit, setQuestionToEdit] = React.useState({});
+  const [ungroupedQuestionToEdit, setQuestionToEdit] = React.useState({});
   const [tableQuestionCount, setTableQuestionCount] = React.useState(0);
   const [changeQuestionToGroup, setChangeQuestionToGroup] = React.useState(false);
 
@@ -65,15 +65,15 @@ function App() {
       getGroupedQuestions()
   }, [GroupTableUiUpdate])
 
-  function toogleCreateQuestion() {
-    setShowCreateModal(showCreateModal ? false:true);
+  function toogleCreateUngroupedQuestion() {
+    setShowCreateUngroupedQuestion(showCreateUngroupedQuestion ? false:true);
   }
 
   function toggleCreateQuestionGroup(){
    setshowCreateGroupedQuestion(showCreateGroupedQuestion ? false:true)
   }
 
-  function openEditQuestion(id) {
+  function openEditUngroupedQuestion(id) {
     async function fetchData() {
             
       const response = await fetch(`http://localhost:5000/question/${id}`);
@@ -90,14 +90,14 @@ function App() {
         return;
       }
       setQuestionToEdit(record);
-      setShowEditModal(true);
+      setShowEditUngroupedQuestion(true);
     }
     fetchData();
   }
 
-  function closeEditQuestion() {
+  function closeEditUngroupedQuestion() {
     setQuestionToEdit({});
-    setShowEditModal(false);
+    setShowEditUngroupedQuestion(false);
   }
 
   function swtichQuestion(){
@@ -118,7 +118,7 @@ function App() {
           questionsCount.totalQuestions > 0 && tableQuestionCount > 0?
           <QuestionTable 
             questionsData={ungroupedQuestions} 
-            openEditQuestion={openEditQuestion}
+            openEditQuestion={openEditUngroupedQuestion}
             updateUI={updateUIonUngroupedTable}
             /> 
             : <h3>No questions to show at this moment</h3>
@@ -172,7 +172,7 @@ function App() {
                 Create Group Question
             </button>
             :
-            <button onClick={toogleCreateQuestion}>
+            <button onClick={toogleCreateUngroupedQuestion}>
               Create Question
             </button>
           }
@@ -184,8 +184,8 @@ function App() {
             <input type="text" placeholder="Search a question" onInput={findQuestion}/>
           }
             { 
-              showCreateModal && <CreateQuestion 
-              toggleClose={toogleCreateQuestion} 
+              showCreateUngroupedQuestion && <CreateQuestion 
+              toggleClose={toogleCreateUngroupedQuestion} 
               updateUI={updateUIonUngroupedTable}
               /> }
             {
@@ -201,9 +201,9 @@ function App() {
               }
               Question
             </button>
-            {showEditModal && <EditQuestion 
-              closeEditQuestion={closeEditQuestion}
-              question={questionToEdit}
+            {showEditUngroupedQuestion && <EditQuestion 
+              closeEditQuestion={closeEditUngroupedQuestion}
+              question={ungroupedQuestionToEdit}
               updateUI={updateUIonUngroupedTable}/>}
           <div className='table-container'>
             {
