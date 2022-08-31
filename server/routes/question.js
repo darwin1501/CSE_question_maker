@@ -126,4 +126,38 @@ recordRoutes.route("/question/delete/:id").delete((req, res)=>{
       })
 })
 
+// routes for modifying grouped questions
+
+// This section will help you create a new record.
+recordRoutes.route("/grouped-question/add").post(function (req, response) {
+  let db_connect = dbo.getDb();
+  let myobj = {
+    questionReference: req.body.questionReference,
+    hasImage: req.body.hasImage,
+    imageUrlAsReference: req.body.imageUrlAsReference,
+    questionType: req.body.questionType,
+    referenceType: req.body.referenceType,
+    groupName: req.body.groupName,
+    questions: req.body.questions,
+    dateModified: req.body.dateModified
+  };
+  db_connect.collection("grouped_questions").insertOne(myobj, function (err, res) {
+    if (err) throw err;
+    response.json(res);
+  });
+});
+
+// This section will help you get a list of all the records.
+recordRoutes.route("/grouped-questions").get(function (req, res) {
+  let db_connect = dbo.getDb("cse_trainer_db");
+  db_connect
+    .collection("grouped_questions")
+    .find({})
+    .sort({dateModified: -1})
+    .toArray(function (err, result) {
+      if (err) throw err;
+      res.json(result);
+    });
+});
+
   module.exports = recordRoutes

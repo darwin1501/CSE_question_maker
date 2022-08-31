@@ -1,7 +1,9 @@
 import React from 'react';
 import './App.css';
 import QuestionTable from './components/ungrouped_questions/QuestionTable';
+import GroupedQuestionsTable from './components/grouped_questions/GroupedQuestionsTable';
 import CreateQuestion from './components/ungrouped_questions/CreateQuestion';
+import CreateGroupedQuestion from './components/grouped_questions/CreateGroupedQuestion';
 import EditQuestion from './components/ungrouped_questions/EditQuestion';
 
 function App() {
@@ -10,9 +12,12 @@ function App() {
     totalQuestions: 0
   });
   const [showCreateModal, setShowCreateModal] = React.useState(false);
+  const [showCreateGroupedQuestion, setshowCreateGroupedQuestion] = React.useState(false);
   const [showEditModal, setShowEditModal] = React.useState(false);
-  const [listOfQuestions, setListOfQuestions] = React.useState([{}]);
-  const [isUpdateUI, setIsUpdateUI] = React.useState(false);
+  const [ungroupedQuestions, setListOfQuestions] = React.useState([{}]);
+  const [groupedQuestions, setGroupedQuestions] = React.useState([])
+  const [UngroupedTableUiUpdate, setUngroupedTableUiUpdate] = React.useState(false);
+  const [GroupTableUiUpdate, setGroupTableUiUpdate] = React.useState(false);
   const [questionToEdit, setQuestionToEdit] = React.useState({});
   const [tableQuestionCount, setTableQuestionCount] = React.useState(0);
   const [changeQuestionToGroup, setChangeQuestionToGroup] = React.useState(false);
@@ -42,10 +47,30 @@ function App() {
     getQuestions();
 
     return
-  }, [isUpdateUI]);
+  }, [UngroupedTableUiUpdate]);
+
+  React.useEffect(()=>{
+    async function getGroupedQuestions(){
+      const response = await fetch("http://localhost:5000/grouped-questions")
+      if (!response.ok) {
+      const message = `An error occured: ${response.statusText}`;
+      window.alert(message);
+      return;
+      }
+
+      const groupedQuestions = await response.json();
+
+      setGroupedQuestions(groupedQuestions)
+  }
+      getGroupedQuestions()
+  }, [GroupTableUiUpdate])
 
   function toogleCreateQuestion() {
     setShowCreateModal(showCreateModal ? false:true);
+  }
+
+  function toggleCreateQuestionGroup(){
+   setshowCreateGroupedQuestion(showCreateGroupedQuestion ? false:true)
   }
 
   function openEditQuestion(id) {
@@ -79,8 +104,32 @@ function App() {
     setChangeQuestionToGroup(!changeQuestionToGroup);
   }
 
-  function updateUI(){
-    setIsUpdateUI(isUpdateUI ? false: true);
+  function updateUIonUngroupedTable(){
+    setUngroupedTableUiUpdate(UngroupedTableUiUpdate ? false: true);
+  }
+
+  function updateUIonGroupedTable(){
+    setGroupTableUiUpdate(GroupTableUiUpdate ? false : true);
+  }
+
+  function LoadTable(){
+    if(changeQuestionToGroup === false){
+      return(
+          questionsCount.totalQuestions > 0 && tableQuestionCount > 0?
+          <QuestionTable 
+            questionsData={ungroupedQuestions} 
+            openEditQuestion={openEditQuestion}
+            updateUI={updateUIonUngroupedTable}
+            /> 
+            : <h3>No questions to show at this moment</h3>
+      )
+    }else{
+      //  load group table here
+      return (<GroupedQuestionsTable 
+                questionsData={groupedQuestions}
+                updateUI={updateUIonGroupedTable}
+                />)
+    }
   }
 
   async function findQuestion(event){
@@ -105,7 +154,7 @@ function App() {
         setTableQuestionCount(0);
       }
     }else{
-      updateUI();
+      updateUIonUngroupedTable();
     }
   }
 
@@ -119,7 +168,7 @@ function App() {
           </div>
           { 
             changeQuestionToGroup ? 
-            <button onClick={toogleCreateQuestion}>
+            <button onClick={toggleCreateQuestionGroup}>
                 Create Group Question
             </button>
             :
@@ -134,10 +183,17 @@ function App() {
             <input type="text" placeholder="Search a group name"/>  :
             <input type="text" placeholder="Search a question" onInput={findQuestion}/>
           }
-            { showCreateModal && <CreateQuestion 
+            { 
+              showCreateModal && <CreateQuestion 
               toggleClose={toogleCreateQuestion} 
-              updateUI={updateUI}
+              updateUI={updateUIonUngroupedTable}
               /> }
+            {
+              showCreateGroupedQuestion && <CreateGroupedQuestion 
+                toggleClose={toggleCreateQuestionGroup}
+                updateUI={updateUIonGroupedTable}
+                />
+            }
             <button onClick={swtichQuestion}>
               Switch to
               {
@@ -148,16 +204,10 @@ function App() {
             {showEditModal && <EditQuestion 
               closeEditQuestion={closeEditQuestion}
               question={questionToEdit}
-              updateUI={updateUI}/>}
+              updateUI={updateUIonUngroupedTable}/>}
           <div className='table-container'>
             {
-              questionsCount.totalQuestions > 0 && tableQuestionCount > 0? 
-              <QuestionTable questionsData={listOfQuestions} 
-                openEditQuestion={openEditQuestion}
-                updateUI={updateUI}
-                // handleDelete={deleteQuestion}
-                /> 
-                : <h3>No questions to show at this moment</h3>
+              <LoadTable />
             }
           </div>
         </div>

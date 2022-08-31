@@ -8,8 +8,6 @@ import { Link } from "react-router-dom";
 
 export default function questionsTable(props){
 
-        console.log(props.questionsData)
-
         const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         const questionList = props.questionsData.map((data)=>{
         const questionDate = new Date(Date.parse(data.dateModified));
