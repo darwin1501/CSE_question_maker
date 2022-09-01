@@ -54,9 +54,6 @@ export default function EditGroupedQuestion(props) {
         return{...prev, [name]:value, hasImage:false, dateModified: new Date()};
       }
       });
-    // setFormData((prev)=>{
-    //   return{...prev, [name]:value, dateModified: new Date()};
-    // });
     }
 
   function formatFormData(event) {

@@ -35,10 +35,6 @@ export default function CreateGroupedQuestion(props) {
                 return{...prev, [name]:value, hasImage:false, dateModified: new Date()};
             }
           });
-
-        // setFormData((prev)=>{
-        //     return{...prev, [name]:value, dateModified: new Date()};
-        // });
     }
 
     async function createGroupedQuestion(event){
