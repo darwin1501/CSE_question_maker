@@ -14,17 +14,18 @@ function App() {
   });
   const [showCreateUngroupedQuestion, setShowCreateUngroupedQuestion] = React.useState(false);
   const [showEditUngroupedQuestion, setShowEditUngroupedQuestion] = React.useState(false);
-  const [ungroupedQuestions, setListOfQuestions] = React.useState([{}]);
+  const [ungroupedQuestions, setUngroupedQuestion] = React.useState([{}]);
   const [UngroupedTableUiUpdate, setUngroupedTableUiUpdate] = React.useState(false);
   const [ungroupedQuestionToEdit, setUngroupedQuestionToEdit] = React.useState({});
+  const [tableUngroupedQuestionCount, setTableUngroupedQuestionCount] = React.useState(0);
 
   const [showCreateGroupedQuestion, setshowCreateGroupedQuestion] = React.useState(false);
   const [showEditGroupedQuestion, setShowEditGroupedQuestion] = React.useState(false);
   const [groupedQuestionToEdit, setGroupedQuestionToEdit] = React.useState({});
   const [groupedQuestions, setGroupedQuestions] = React.useState([])
   const [GroupTableUiUpdate, setGroupTableUiUpdate] = React.useState(false);
+  const [tableGroupQuestionCount, setTableGroupQuestionCount] = React.useState(0);
 
-  const [tableQuestionCount, setTableQuestionCount] = React.useState(0);
   const [changeQuestionToGroup, setChangeQuestionToGroup] = React.useState(false);
 
   React.useEffect(()=>{
@@ -43,11 +44,11 @@ function App() {
         return {...prev, totalQuestions: Object.keys(questions).length}
       })
 
-      setTableQuestionCount(Object.keys(questions).length);
+      setTableUngroupedQuestionCount(Object.keys(questions).length);
 
       // sort object here
 
-      setListOfQuestions(questions);
+      setUngroupedQuestion(questions);
     }
     getQuestions();
 
@@ -65,7 +66,8 @@ function App() {
 
       const groupedQuestions = await response.json();
 
-      setGroupedQuestions(groupedQuestions)
+      setGroupedQuestions(groupedQuestions);
+      setTableGroupQuestionCount(Object.keys(groupedQuestions).length)
   }
       getGroupedQuestions()
   }, [GroupTableUiUpdate])
@@ -144,24 +146,25 @@ function App() {
   function LoadTable(){
     if(changeQuestionToGroup === false){
       return(
-          questionsCount.totalQuestions > 0 && tableQuestionCount > 0?
+          questionsCount.totalQuestions > 0 && tableUngroupedQuestionCount > 0?
           <QuestionTable 
             questionsData={ungroupedQuestions} 
             openEditQuestion={openEditUngroupedQuestion}
             updateUI={updateUIonUngroupedTable}
-            /> 
-            : <h3>No questions to show at this moment</h3>
+            /> : <h3>No questions to show at this moment</h3>
       )
     }else{
-      return (<GroupedQuestionsTable 
+      return (tableGroupQuestionCount > 0 ? <GroupedQuestionsTable 
                 questionsData={groupedQuestions}
                 openEditQuestion={openEditGroupedQuestion}
                 updateUI={updateUIonGroupedTable}
-                />)
+                /> : <h3>No group questions to show at this moment</h3>
+                
+      )
     }
   }
 
-  async function findQuestion(event){
+  async function findUngroupedQuestion(event){
     const question = event.target.value;
 
     if(question !== ""){
@@ -177,13 +180,41 @@ function App() {
       const resultCount = Object.keys(record).length;
 
       if( resultCount > 0){
-        setListOfQuestions(record);
-        setTableQuestionCount(resultCount);
+        setUngroupedQuestion(record);
+        setTableUngroupedQuestionCount(resultCount);
       }else{
-        setTableQuestionCount(0);
+        setTableUngroupedQuestionCount(0);
       }
     }else{
       updateUIonUngroupedTable();
+    }
+  }
+
+  async function findGroupedQuestion(event){
+    const question = event.target.value;
+
+    if(question !== ""){
+      const response = await fetch(`http://localhost:5000/grouped-questions/search/${question}`);
+
+      if (!response.ok) {
+        const message = `An error has occured: ${response.statusText}`;
+        window.alert(message);
+        return;
+      }
+
+      const record = await response.json();
+      const resultCount = Object.keys(record).length;
+
+      if( resultCount > 0){
+        setGroupedQuestions(record);
+        setTableGroupQuestionCount(resultCount);
+      }else{
+        setTableGroupQuestionCount(0);
+      }
+    }else{
+      // update UI on with group table to
+      // load all group questions
+      updateUIonGroupedTable();
     }
   }
 
@@ -209,8 +240,8 @@ function App() {
             <br></br>
           {
             changeQuestionToGroup ?
-            <input type="text" placeholder="Search a group name"/>  :
-            <input type="text" placeholder="Search a question" onInput={findQuestion}/>
+            <input type="text" placeholder="Search a group name" onInput={findGroupedQuestion}/>  :
+            <input type="text" placeholder="Search a question" onInput={findUngroupedQuestion}/>
           }
           { 
             showCreateUngroupedQuestion && <CreateQuestion 

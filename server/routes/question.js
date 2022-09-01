@@ -220,6 +220,30 @@ recordRoutes.route("/grouped-question/delete/:id").delete((req, res)=>{
           console.log("1 document deleted")
           res.json(obj)
       })
-})
+});
+
+// This section will help you get questions related to search field vaue
+recordRoutes.route("/grouped-questions/search/:groupName").get(function (req, res) {
+  let db_connect = dbo.getDb();
+
+    const myQuery = [
+    {
+      $search: {
+        index: 'groupName',
+        phrase: {
+          query: req.params.groupName,
+          path: "groupName"
+        }
+      }
+    }
+  ]
+
+  db_connect
+  .collection("grouped_questions")
+  .aggregate(myQuery).toArray(function(err, result) {
+    if (err) throw err;
+    res.json(result);
+  });;
+});
 
   module.exports = recordRoutes
