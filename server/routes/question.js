@@ -208,4 +208,18 @@ recordRoutes.route("/grouped-question/find/:groupName").get(function (req, res) 
       });
 });
 
+// This section will help you delete a record
+recordRoutes.route("/grouped-question/delete/:id").delete((req, res)=>{
+  let db_connect = dbo.getDb()
+  let myQuery = { _id: ObjectId(req.params.id) }
+
+  db_connect
+      .collection("grouped_questions")
+      .deleteOne(myQuery, (err, obj)=>{
+          if(err) throw err
+          console.log("1 document deleted")
+          res.json(obj)
+      })
+})
+
   module.exports = recordRoutes

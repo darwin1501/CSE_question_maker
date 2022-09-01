@@ -10,6 +10,19 @@ export default function GroupedQuestionsTable(props){
 
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+    async function deleteGroupedQuestion(id) {
+                // eslint-disable-next-line no-restricted-globals
+                const confirmation = confirm("Do you want to delete this?");
+                
+                if(confirmation === true){
+                    await fetch(`http://localhost:5000/grouped-question/delete/${id}`, {
+                    method: "DELETE"
+                    });
+                    alert("question deleted");
+                    props.updateUI();
+                }
+            }
+
     const tableData = props.questionsData.map((data)=>{
         const questionDate = new Date(Date.parse(data.dateModified));
         const month = months[questionDate.getMonth()];
@@ -24,6 +37,7 @@ export default function GroupedQuestionsTable(props){
             action:
                 <div style={{display: "flex", justifyContent: "center", alignItems:"center", gap: "15px"}}>
                     <p className="btn-in-table" onClick={()=>{props.openEditQuestion(data._id)}} >Edit</p>
+                    <p className="btn-in-table" onClick={()=>{deleteGroupedQuestion(data._id)}}>Delete</p>
                 </div>
         }
     })
