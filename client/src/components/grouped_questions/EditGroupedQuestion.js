@@ -6,6 +6,8 @@ export default function EditGroupedQuestion(props) {
    const [formData, setFormData] = React.useState(props.groupedQuestion);
    const [prevQuestion] = React.useState(props.groupedQuestion);
 
+   console.log(formData)
+
     async function updateQuestion(event) {
       event.preventDefault();
 
@@ -45,13 +47,17 @@ export default function EditGroupedQuestion(props) {
     
     setFormData((prev)=>{
       // conditional setting of values on question reference
-      if(name === "imageUrlAsReference"){
-          return{...prev, [name]:value, hasImage:true, questionReference: "",  dateModified: new Date()};
+      // conditional setting of values on question reference
+      if(name === "referenceType" && value === "image"){
+        return{...prev, [name]:value, hasImage:true, dateModified: new Date()};
       }else{
-          return{...prev, [name]:value, hasImage:false, imageUrlAsReference: "", dateModified: new Date()};
+        return{...prev, [name]:value, hasImage:false, dateModified: new Date()};
       }
-    });
-  }
+      });
+    // setFormData((prev)=>{
+    //   return{...prev, [name]:value, dateModified: new Date()};
+    // });
+    }
 
   function formatFormData(event) {
     const name = event.target.name;

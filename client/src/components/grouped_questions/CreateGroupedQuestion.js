@@ -13,7 +13,7 @@ export default function CreateGroupedQuestion(props) {
         questions: [],
         dateModified: new Date()   
     });
-    
+
     function formatFormData(event) {
         const name = event.target.name;
         const value = event.target.value.trim();
@@ -29,12 +29,16 @@ export default function CreateGroupedQuestion(props) {
         
         setFormData((prev)=>{
             // conditional setting of values on question reference
-            if(name === "imageUrlAsReference"){
-                return{...prev, [name]:value, hasImage:true, questionReference: "",  dateModified: new Date()};
+            if(name === "referenceType" && value === "image"){
+                return{...prev, [name]:value, hasImage:true,  dateModified: new Date()};
             }else{
-                return{...prev, [name]:value, hasImage:false, imageUrlAsReference: "", dateModified: new Date()};
+                return{...prev, [name]:value, hasImage:false, dateModified: new Date()};
             }
           });
+
+        // setFormData((prev)=>{
+        //     return{...prev, [name]:value, dateModified: new Date()};
+        // });
     }
 
     async function createGroupedQuestion(event){
@@ -113,7 +117,7 @@ export default function CreateGroupedQuestion(props) {
                         </label> :
                         <label>
                             Image as Reference
-                            <input name="imageUrlAsReference" value={formData.imageUrl}  onChange={changeFormData} onBlur={formatFormData} placeholder="Image Url" required/>
+                            <input name="imageUrlAsReference" value={formData.imageUrlAsReference}  onChange={changeFormData} onBlur={formatFormData} placeholder="Image Url" required/>
                         </label>
                     }
                     
