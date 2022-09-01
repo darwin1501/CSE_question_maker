@@ -153,7 +153,6 @@ function App() {
             : <h3>No questions to show at this moment</h3>
       )
     }else{
-      //  load group table here
       return (<GroupedQuestionsTable 
                 questionsData={groupedQuestions}
                 openEditQuestion={openEditGroupedQuestion}

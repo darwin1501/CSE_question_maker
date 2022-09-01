@@ -12,7 +12,7 @@ export default function EditGroupedQuestion(props) {
       const isGroupNameExist = await Checker.hasGroupNameDuplicate(formData.groupName);
       let updateThis = null;
 
-      // if group namee is not modified ignore duplicate checking
+      // if group name is not modified ignore duplicate checking
       if(prevQuestion.groupName === formData.groupName){
         updateThis = true;
       }else{
@@ -24,7 +24,6 @@ export default function EditGroupedQuestion(props) {
       }
 
       if(updateThis === true){
-        // This will send a post request to update the data in the database.
         await fetch(`http://localhost:5000/grouped-question/update/${formData._id}`, {
           method: "POST",
           body: JSON.stringify(formData),
