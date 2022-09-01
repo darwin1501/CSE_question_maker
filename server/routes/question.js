@@ -160,4 +160,52 @@ recordRoutes.route("/grouped-questions").get(function (req, res) {
     });
 });
 
+// This section will help you get a single record by id
+recordRoutes.route("/grouped-question/:id").get(function (req, res) {
+  let db_connect = dbo.getDb();
+  let myquery = { _id: ObjectId( req.params.id )};
+  db_connect
+      .collection("grouped_questions")
+      .findOne(myquery, function (err, result) {
+        if (err) throw err;
+        res.json(result);
+      });
+});
+
+recordRoutes.route("/grouped-question/update/:id").post(function (req, response) {
+  let db_connect = dbo.getDb();
+  let myquery = { _id: ObjectId( req.params.id )};
+  let newvalues = {
+    $set: {
+      questionReference: req.body.questionReference,
+      hasImage: req.body.hasImage,
+      imageUrlAsReference: req.body.imageUrlAsReference,
+      questionType: req.body.questionType,
+      referenceType: req.body.referenceType,
+      groupName: req.body.groupName,
+      questions: req.body.questions,
+      dateModified: req.body.dateModified
+    },
+  };
+  db_connect
+    .collection("grouped_questions")
+    .updateOne(myquery, newvalues, function (err, res) {
+      if (err) throw err;
+      console.log("1 document updated");
+      response.json(res);
+    });
+});
+
+// This section will help you get a single record by question
+recordRoutes.route("/grouped-question/find/:groupName").get(function (req, res) {
+  let db_connect = dbo.getDb();
+  let myquery = { groupName: req.params.groupName};
+  db_connect
+      .collection("grouped_questions")
+      .findOne(myquery, function (err, result) {
+        if (err) throw err;
+        res.json(result);
+      });
+});
+
   module.exports = recordRoutes

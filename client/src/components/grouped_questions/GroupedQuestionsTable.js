@@ -4,7 +4,6 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
 import paginationFactory from "react-bootstrap-table2-paginator";
-import { Link } from "react-router-dom";
 
 
 export default function GroupedQuestionsTable(props){
@@ -21,7 +20,11 @@ export default function GroupedQuestionsTable(props){
             groupName: data.groupName,
             questionType: data.questionType,
             referenceType: data.referenceType,
-            dateModified: `${month} ${date}, ${year}`
+            dateModified: `${month} ${date}, ${year}`,
+            action:
+                <div style={{display: "flex", justifyContent: "center", alignItems:"center", gap: "15px"}}>
+                    <p className="btn-in-table" onClick={()=>{props.openEditQuestion(data._id)}} >Edit</p>
+                </div>
         }
     })
     

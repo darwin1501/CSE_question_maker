@@ -47,7 +47,26 @@ async function hasQuestionDuplicate(question) {
     }
 }
 
+async function hasGroupNameDuplicate(groupName) {
+  const response = await fetch(`http://localhost:5000/grouped-question/find/${groupName}`);
+    if (!response.ok) {
+      const message = `An error has occured: ${response.statusText}`;
+      window.alert(message);
+      return;
+    }
+    const record = await response.json();
+
+    console.log(record)
+
+    if (!record) {
+      return false;
+    }else{
+      return true;
+    }
+}
+
   export default{
     hasEmptyString,
-    hasQuestionDuplicate
+    hasQuestionDuplicate,
+    hasGroupNameDuplicate
   };
