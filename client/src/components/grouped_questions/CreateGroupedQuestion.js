@@ -1,4 +1,5 @@
 import React from 'react';
+import Checker from '../../utility_module/checker';
 
 export default function CreateGroupedQuestion(props) {
 
@@ -41,20 +42,26 @@ export default function CreateGroupedQuestion(props) {
 
         const newQuestion = { ...formData };
 
-        await fetch("http://localhost:5000/grouped-question/add", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(newQuestion),
-                })
-                .catch(error => {
-                window.alert(error);
-                return;
-            });
+        const isGroupNameExist = await Checker.hasGroupNameDuplicate(formData.groupName)
 
-        alert("Grouped Question Added")
-        props.updateUI()
+        if(isGroupNameExist === false) {
+            await fetch("http://localhost:5000/grouped-question/add", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(newQuestion),
+                    })
+                    .catch(error => {
+                    window.alert(error);
+                    return;
+                });
+    
+            alert("Grouped Question Added");
+            props.updateUI()
+        }else{
+            alert("Error: Group Name Already Exist");
+        }
     }
 
     return(

@@ -55,9 +55,7 @@ async function hasGroupNameDuplicate(groupName) {
       return;
     }
     const record = await response.json();
-
-    console.log(record)
-
+    
     if (!record) {
       return false;
     }else{
