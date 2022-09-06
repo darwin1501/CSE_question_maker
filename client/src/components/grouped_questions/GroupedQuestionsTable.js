@@ -38,6 +38,7 @@ export default function GroupedQuestionsTable(props){
                 <div style={{display: "flex", justifyContent: "center", alignItems:"center", gap: "15px"}}>
                     <p className="btn-in-table" onClick={()=>{props.openEditQuestion(data._id)}} >Edit</p>
                     <p className="btn-in-table" onClick={()=>{deleteGroupedQuestion(data._id)}} >Delete</p>
+                    <p className="btn-in-table">Vew Questions</p>
                 </div>
         }
     })
@@ -49,6 +50,11 @@ export default function GroupedQuestionsTable(props){
         textOverflow: "ellipsis",
         fontWeight: 'bold'
     }
+
+    const defaultSorted = [{
+        dataField: 'dateModified',
+        order: 'desc'
+      }];
 
     const columns = [
         {dataField: "id", text: "ID"},
@@ -76,7 +82,7 @@ export default function GroupedQuestionsTable(props){
                 keyField="id" 
                 data={ tableData } 
                 columns={ columns } 
-                // defaultSorted = {defaultSorted}
+                defaultSorted = {defaultSorted}
                 pagination={ paginationFactory({
                     page: 1,
                     sizePerPage: 4,
