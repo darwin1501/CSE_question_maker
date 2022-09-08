@@ -246,4 +246,29 @@ recordRoutes.route("/grouped-questions/search/:groupName").get(function (req, re
   });;
 });
 
+//grouped-question-add-question/add/
+recordRoutes.route("/grouped-question-add-question/add/:id").post(function (req, response) {
+  let db_connect = dbo.getDb();
+  let myquery = { _id: ObjectId( req.params.id )};
+  let newvalues = {
+    $set: {
+      questionReference: req.body.questionReference,
+      hasImage: req.body.hasImage,
+      imageUrlAsReference: req.body.imageUrlAsReference,
+      questionType: req.body.questionType,
+      referenceType: req.body.referenceType,
+      groupName: req.body.groupName,
+      questions: req.body.questions,
+      dateModified: req.body.dateModified
+    },
+  };
+  db_connect
+    .collection("grouped_questions")
+    .updateOne(myquery, newvalues, function (err, res) {
+      if (err) throw err;
+      console.log("1 document updated");
+      response.json(res);
+    });
+});
+
   module.exports = recordRoutes

@@ -38,7 +38,7 @@ export default function GroupedQuestionsTable(props){
                 <div style={{display: "flex", justifyContent: "center", alignItems:"center", gap: "15px"}}>
                     <p className="btn-in-table" onClick={()=>{props.openEditQuestion(data._id)}} >Edit</p>
                     <p className="btn-in-table" onClick={()=>{deleteGroupedQuestion(data._id)}} >Delete</p>
-                    <p className="btn-in-table">Vew Questions</p>
+                    <p className="btn-in-table" onClick={()=>{props.openQuestionsModal(data._id)}}>Vew Questions</p>
                 </div>
         }
     })
