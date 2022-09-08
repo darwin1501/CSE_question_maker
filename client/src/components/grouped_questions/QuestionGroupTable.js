@@ -57,7 +57,8 @@ export default function QuestionsGroupTable(props){
       }];
 
     const columns = [
-        {dataField: "id", text: "ID"},
+        {dataField: "id", text: "ID",
+        style: columnStyle},
         {dataField: "groupName", text: "Group Name",
         style: columnStyle},
         {dataField: "referenceType", text: "Reference Type"},

@@ -1,4 +1,5 @@
 import React from "react";
+import QuestionsTable from "./QuestionsTable";
 
 export default function QuestionInGroupViewer(props){
     return(
@@ -8,7 +9,8 @@ export default function QuestionInGroupViewer(props){
                     <button onClick={()=>{props.handleClose()}}>X</button>
                 </div>
                 <button onClick={()=>{props.openCreateQuestion()}}>Add Question</button>
-                {/* load table here */}
+                <QuestionsTable 
+                questionData={props.questionGroup}/>
             </div>
         </div>
     )

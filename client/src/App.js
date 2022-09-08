@@ -307,7 +307,8 @@ function App() {
 
           {showQuestionInGroup && <QuestionInGroupModal 
             openCreateQuestion={toggleShowCreateQuestionInGroup}
-            handleClose={closeQuestionsInQuestionGroup}/>}
+            handleClose={closeQuestionsInQuestionGroup}
+            questionGroup={groupedQuestionToModify}/>}
 
           {showCreateQuestionInGroup && <CreateQuestion 
             toggleClose={toggleShowCreateQuestionInGroup} 
