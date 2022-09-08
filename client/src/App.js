@@ -28,6 +28,7 @@ function App() {
   const [tableGroupQuestionCount, setTableGroupQuestionCount] = React.useState(0);
   const [showQuestionInGroup, setShowQuestionsInGroup] = React.useState(false);
   const [showCreateQuestionInGroup, setShowCreateQuestionInGroup] = React.useState(false);
+  const [questionGroupID, setQuestionGroupID] = React.useState("");
 
   const [changeQuestionToGroup, setChangeQuestionToGroup] = React.useState(false);
 
@@ -74,6 +75,7 @@ function App() {
   }
       getGroupedQuestions()
   }, [GroupTableUiUpdate])
+
 
   function toogleCreateUngroupedQuestion() {
     setShowCreateUngroupedQuestion(!showCreateUngroupedQuestion)
@@ -161,7 +163,7 @@ function App() {
                 questionsData={groupedQuestions}
                 openEditQuestion={openEditGroupedQuestion}
                 updateUI={updateUIonGroupedTable}
-                openQuestionsModal={getQuestionGroup}
+                openQuestionsModal={getQuestionInQuestionGroup}
                 /> : <h3>No group questions to show at this moment</h3>
                 
       )
@@ -222,7 +224,7 @@ function App() {
     }
   }
 
-  async function getQuestionGroup(id){
+  async function loadQuestionInQuestionGroup(id){
     const response = await fetch(`http://localhost:5000/grouped-question/${id}`);
 
     if (!response.ok) {
@@ -236,8 +238,21 @@ function App() {
       window.alert(`Record with id ${id} not found`);
       return;
     }
+
+    return record;
+  }
+
+  async function getQuestionInQuestionGroup(id){
+    const record = await loadQuestionInQuestionGroup(id);
     setGroupedQuestionToModify(record)
     setShowQuestionsInGroup(!showQuestionInGroup)
+    // set ID
+    setQuestionGroupID(id)
+  }
+
+  async function refreshAQuestionGroup(){
+    const record = await loadQuestionInQuestionGroup(questionGroupID);
+    setGroupedQuestionToModify(record)
   }
 
   function closeQuestionsInQuestionGroup(){
@@ -312,7 +327,7 @@ function App() {
 
           {showCreateQuestionInGroup && <CreateQuestion 
             toggleClose={toggleShowCreateQuestionInGroup} 
-            updateUI={updateUIonUngroupedTable}
+            updateUI={refreshAQuestionGroup}
             type={'group'}
             questionGroup={groupedQuestionToModify}/>}
         </div>

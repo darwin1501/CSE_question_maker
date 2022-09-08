@@ -123,6 +123,7 @@ export default function CreateQuestion (props) {
             },
           });
           alert("New question added to group")
+          props.updateUI()
     } else {
       alert("Error: Can't identify question type")
     }

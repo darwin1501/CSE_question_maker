@@ -2,6 +2,7 @@ import React from "react";
 import QuestionsTable from "./QuestionsTable";
 
 export default function QuestionInGroupViewer(props){
+    console.log(props.questionGroup)
     return(
         <div className="modal-container">
             <div className="card-modal-content-md">
@@ -9,6 +10,7 @@ export default function QuestionInGroupViewer(props){
                     <button onClick={()=>{props.handleClose()}}>X</button>
                 </div>
                 <button onClick={()=>{props.openCreateQuestion()}}>Add Question</button>
+               
                 <QuestionsTable 
                 questionData={props.questionGroup}/>
             </div>
