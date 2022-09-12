@@ -61,6 +61,7 @@ export default function QuestionsGroupTable(props){
         style: columnStyle},
         {dataField: "groupName", text: "Group Name",
         style: columnStyle},
+        {dataField: "questionType", text: "Question Type"},
         {dataField: "referenceType", text: "Reference Type"},
         {
             dataField: "dateModified", 
