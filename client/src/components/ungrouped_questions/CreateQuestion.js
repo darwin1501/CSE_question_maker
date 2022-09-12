@@ -110,10 +110,10 @@ export default function CreateQuestion (props) {
     } else if (props.type === 'group') {
         const questionGroup = props.questionGroup
         // add _id property in formData that contains question data
-        const newQuestion = {...formData, _id:nanoid()}
-        const combined = [...questionGroup.questions, newQuestion]
+        const newQuestion = {...formData, questionType: props.questionGroup.questionType, _id:nanoid()}
+        const updatedQestion = [...questionGroup.questions, newQuestion]
         // copy old questions then add new one.
-        const modifiedQuestionGroup = {...questionGroup, questions:combined}
+        const modifiedQuestionGroup = {...questionGroup, questions:updatedQestion}
         
         await fetch(`http://localhost:5000/grouped-question-add-question/add/${questionGroup._id}`, {
             method: "POST",
@@ -146,28 +146,30 @@ export default function CreateQuestion (props) {
             Create Question
           </h4>
           <form onSubmit={addQuestion}>
-            <select
+            {props.type === "ungroup" && 
+              <select
               name='questionType'
               value={formData.questionType}
               onChange={changeFormData}
               onBlur={formatFormData}
               required
-            >
-              <option value=''>---Select Category---</option>
-              <option value='Numerical'>Numerical</option>
-              <option value='Analitical'>Analitical</option>
-              <option value='Verbal'>Verbal</option>
-              <option value='Philippine Constitution'>
-                Philippine Constitution
-              </option>
-              <option value='RA 6713'>RA 6713</option>
-              <option
-                value='Environment management 203
-                          and protection'
               >
-                Environment management 203 and protection
-              </option>
-            </select>
+                  <option value=''>---Select Category---</option>
+                  <option value='Numerical'>Numerical</option>
+                  <option value='Analitical'>Analitical</option>
+                  <option value='Verbal'>Verbal</option>
+                  <option value='Philippine Constitution'>
+                    Philippine Constitution
+                  </option>
+                  <option value='RA 6713'>RA 6713</option>
+                  <option
+                    value='Environment management 203
+                              and protection'
+                    >
+                    Environment management 203 and protection
+                  </option>
+              </select>
+            }
             <label>
               Question
               <textarea
