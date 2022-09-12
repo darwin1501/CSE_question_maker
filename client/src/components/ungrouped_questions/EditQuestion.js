@@ -3,8 +3,22 @@ import Checker from '../../utility_module/checker';
 
 export default function EditQuestion(props) {
 
-   const [formData, setFormData] = React.useState(props.question);
-   const [prevQuestion] = React.useState(props.question);
+  let question = null;
+  let questionsInQuestionGroup = null
+  let selectedQuestion = null
+
+  const questionType = props.type
+
+  if(questionType === "group"){
+    questionsInQuestionGroup = props.questionGroup.questions
+    selectedQuestion = questionsInQuestionGroup.filter((question)=> question._id === props.questionID)
+    question = selectedQuestion[0]
+  }else{
+    question = props.question
+  }
+
+   const [formData, setFormData] =  React.useState(question);
+   const [prevQuestion] = React.useState(question);
 
     async function updateQuestion(event) {
       event.preventDefault();
@@ -12,31 +26,68 @@ export default function EditQuestion(props) {
       const isQuestionExist = await Checker.hasQuestionDuplicate(formData.question);
       let updateThis = null;
 
-      // if question is not modified ignore duplicate checking
-      if(prevQuestion.question === formData.question){
-        updateThis = true;
-      }else{
-        if(isQuestionExist === true){
-          updateThis = false;
-        }else{
+      if(questionType === "ungroup") {
+        // if question is not modified ignore duplicate checking
+        if(prevQuestion.question === formData.question){
           updateThis = true;
+        }else{
+          if(isQuestionExist === true){
+            updateThis = false;
+          }else{
+            updateThis = true;
+          }
         }
-      }
+  
+        if(updateThis === true){
+          // This will send a post request to update the data in the database.
+          await fetch(`http://localhost:5000/question/update/${formData._id}`, {
+            method: "POST",
+            body: JSON.stringify(formData),
+            headers: {
+              'Content-Type': 'application/json'
+            },
+          });
+          alert("Question Updated");
+          props.updateUI();
+        }else{
+          alert("Error: Question Already Exists");
+        }
+      } else if(questionType === "group") {
+        // group update logic
 
-      if(updateThis === true){
-        // This will send a post request to update the data in the database.
-        await fetch(`http://localhost:5000/question/update/${formData._id}`, {
+
+        // get the index of selected question
+        const indexOfSelectedQuestion = questionsInQuestionGroup.findIndex( question=> question._id === props.questionID)
+        // delete the selected question
+        const prevQuestionWithoutSelected = questionsInQuestionGroup.filter((question) => question._id !== props.questionID)
+
+        //logic for inserting replacing object within array
+        const insert = (arr, index, ...newItems) => [
+          // part of the array before the specified index
+          ...arr.slice(0, index),
+          // inserted items
+          ...newItems,
+          // part of the array after the specified index
+          ...arr.slice(index)
+        ]
+        // insert the updated question
+        const updatedQuestion = insert(prevQuestionWithoutSelected, indexOfSelectedQuestion, formData)
+        // update thhe properties of questions
+        const updatedQuestionGroup = {...props.questionGroup, questions: updatedQuestion}
+
+        // call an update
+        await fetch(`http://localhost:5000/grouped-question/update/${props.questionGroup._id}`, {
           method: "POST",
-          body: JSON.stringify(formData),
+          body: JSON.stringify(updatedQuestionGroup),
           headers: {
             'Content-Type': 'application/json'
           },
         });
         alert("Question Updated");
-        
-        props.updateUI();
+
+        props.updateUI()
       }else{
-        alert("Error: Question Already Exists");
+        alert("Error: can't identify question type")
       }
   }
 
@@ -70,6 +121,8 @@ export default function EditQuestion(props) {
     }
   }
 
+  
+
     return(
         <div>
             <div className="modal-container">
@@ -79,7 +132,7 @@ export default function EditQuestion(props) {
                         justifyContent: "flex-end",
                         alignItems: "center"
                     }}>
-                        <button onClick={props.closeEditQuestion}>
+                        <button onClick={()=>{props.handleClose()}}>
                             x
                         </button>
                     </div>
@@ -87,7 +140,8 @@ export default function EditQuestion(props) {
                         Edit Question
                     </h4>
                     <form onSubmit={updateQuestion}>
-                        <select name="questionType" value={formData.questionType} onChange={changeFormData} onBlur={formatFormData}>
+                        { questionType === "ungroup" && 
+                         <select name="questionType" value={formData.questionType} onChange={changeFormData} onBlur={formatFormData}>
                             <option value="">---Select Category---</option>
                             <option value="Numerical">Numerical</option>
                             <option value="Analitical">Analitical</option>
@@ -99,7 +153,8 @@ export default function EditQuestion(props) {
                                 Environment management 203
                                 and protection
                             </option>
-                        </select>
+                        </select> 
+                        }
                         <label>
                             Question
                             <textarea name="question" value={formData.question} onChange={changeFormData} onBlur={formatFormData}/>
@@ -129,5 +184,6 @@ export default function EditQuestion(props) {
                     </div>
             </div>
         </div>
+        
     );
 }

@@ -15,7 +15,7 @@ export default function QuestionsTable(props){
             question: data.question,
             action: 
             <div style={{display: "flex", justifyContent: "center", alignItems:"center", gap: "15px"}}>
-                <p className="btn-in-table">Edit</p>
+                <p className="btn-in-table" onClick={()=>{props.openEditQuestion(data._id)}}>Edit</p>
                 <p className="btn-in-table">Delete</p>
                 <p className="btn-in-table">Preview</p>
             </div>

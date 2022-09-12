@@ -29,6 +29,10 @@ function App() {
   const [showQuestionInGroup, setShowQuestionsInGroup] = React.useState(false);
   const [showCreateQuestionInGroup, setShowCreateQuestionInGroup] = React.useState(false);
   const [questionGroupID, setQuestionGroupID] = React.useState("");
+  // a question ID of selected question in question group
+  //  this will help to identify which group questions within groups to modify
+  const [questionIDOfQuestionGroup, setQuestionIDOfQuestionGroup] = React.useState("");
+  const [openEditQuestionInQuestionGroup, setOpenEditQuestionInQuestionGroup] = React.useState(false);
 
   const [changeQuestionToGroup, setChangeQuestionToGroup] = React.useState(false);
 
@@ -250,7 +254,7 @@ function App() {
     setQuestionGroupID(id)
   }
 
-  async function refreshAQuestionGroup(){
+  async function refreshQuestionsInQuestionGroup(){
     const record = await loadQuestionInQuestionGroup(questionGroupID);
     setGroupedQuestionToModify(record)
   }
@@ -261,6 +265,12 @@ function App() {
 
   function toggleShowCreateQuestionInGroup(){
     setShowCreateQuestionInGroup(!showCreateQuestionInGroup);
+  }
+
+  function showEditQuestionInQuestionGroup(id){
+    setOpenEditQuestionInQuestionGroup(!openEditQuestionInQuestionGroup)
+    // set the selected question id in question group
+    setQuestionIDOfQuestionGroup(id); 
   }
 
   return (
@@ -307,9 +317,10 @@ function App() {
             type={'ungroup'}/> }
 
           {showEditUngroupedQuestion && <EditQuestion 
-            closeEditQuestion={closeEditUngroupedQuestion}
+            handleClose={closeEditUngroupedQuestion}
             question={ungroupedQuestionToEdit}
-            updateUI={updateUIonUngroupedTable}/>}
+            updateUI={updateUIonUngroupedTable}
+            type={"ungroup"}/>}
 
           {showCreateGroupedQuestion && <CreateGroupedQuestion 
             toggleClose={toggleCreateQuestionGroup}
@@ -322,14 +333,23 @@ function App() {
 
           {showQuestionInGroup && <QuestionInGroupModal 
             openCreateQuestion={toggleShowCreateQuestionInGroup}
+            openEditQuestion={showEditQuestionInQuestionGroup}
             handleClose={closeQuestionsInQuestionGroup}
             questionGroup={groupedQuestionToModify}/>}
 
           {showCreateQuestionInGroup && <CreateQuestion 
             toggleClose={toggleShowCreateQuestionInGroup} 
-            updateUI={refreshAQuestionGroup}
+            updateUI={refreshQuestionsInQuestionGroup}
             type={'group'}
             questionGroup={groupedQuestionToModify}/>}
+
+            {openEditQuestionInQuestionGroup && <EditQuestion
+              handleClose={setOpenEditQuestionInQuestionGroup}
+              questionGroup={groupedQuestionToModify}
+              questionID={questionIDOfQuestionGroup}
+              openEditQuestion={showEditQuestionInQuestionGroup}
+              type={"group"}
+              updateUI={refreshQuestionsInQuestionGroup}/>}
         </div>
       </main>
     </div>
