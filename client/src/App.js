@@ -336,11 +336,13 @@ function App() {
             openEditQuestion={showEditQuestionInQuestionGroup}
             handleClose={closeQuestionsInQuestionGroup}
             updateUI={refreshQuestionsInQuestionGroup}
+            updateTableUI={updateUIonGroupedTable}
             questionGroup={groupedQuestionToModify}/>}
 
           {showCreateQuestionInGroup && <CreateQuestion 
             toggleClose={toggleShowCreateQuestionInGroup} 
             updateUI={refreshQuestionsInQuestionGroup}
+            updateTableUI={updateUIonGroupedTable}
             type={'group'}
             questionGroup={groupedQuestionToModify}/>}
 

@@ -27,6 +27,7 @@ export default function QuestionsTable(props){
           });
           alert("Question Deleted");
           props.updateUI();
+          props.updateTableUI()
         }
     }
 

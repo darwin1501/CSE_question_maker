@@ -28,11 +28,13 @@ export default function QuestionsGroupTable(props){
         const month = months[questionDate.getMonth()];
         const date = questionDate.getDate();
         const year = questionDate.getFullYear();
+        const questionCount = Object.keys(data.questions).length
         return {
             id: data._id,
             groupName: data.groupName,
             questionType: data.questionType,
             referenceType: data.referenceType,
+            questionCount: questionCount,
             dateModified: `${month} ${date}, ${year}`,
             action:
                 <div style={{display: "flex", justifyContent: "center", alignItems:"center", gap: "15px"}}>
@@ -63,6 +65,7 @@ export default function QuestionsGroupTable(props){
         style: columnStyle},
         {dataField: "questionType", text: "Question Type"},
         {dataField: "referenceType", text: "Reference Type"},
+        {dataField: "questionCount", text: "Question Count"},
         {
             dataField: "dateModified", 
             text: "Date Modified",

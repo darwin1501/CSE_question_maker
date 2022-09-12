@@ -14,6 +14,7 @@ export default function QuestionInGroupViewer(props){
                 questionData={props.questionGroup}
                 openEditQuestion={props.openEditQuestion}
                 updateUI={props.updateUI}
+                updateTableUI={props.updateTableUI}
                 />
             </div>
         </div>
