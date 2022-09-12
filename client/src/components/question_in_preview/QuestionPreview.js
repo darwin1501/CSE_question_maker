@@ -3,8 +3,7 @@ import PreviewStyle from "./PreviewStyle.module.css"
 import { useParams } from "react-router-dom"
 
 export default function QuestionPreview () {
-    const { _id } = useParams()
-
+    const { _id, type, questionIDinQuestionGroup} = useParams()
     const [questionData, setQuestionData] = React.useState({
         question:"",
       questionType:"",
@@ -65,10 +64,40 @@ export default function QuestionPreview () {
 
             shuffleChoices(randomChoices)
             setCompletedChoices(randomChoices)
-
         }
 
-        getQuestion()
+        async function getQuestionInQuestionGroup(){
+            const response = await fetch(`http://localhost:5000/grouped-question/${_id}`)
+
+            if (!response.ok) {
+                const message = `An error occured: ${response.statusText}`;
+                window.alert(message);
+                return;
+              }
+        
+              const result = await response.json();
+              const questions = result.questions;
+              const selectedQuestion = questions.filter((question)=> question._id === questionIDinQuestionGroup)[0]
+
+              setQuestionData((prev)=>{
+                return {...prev, ...selectedQuestion}
+              })
+              const randomChoices = [
+                selectedQuestion.choices.choiceOne,
+                selectedQuestion.choices.choiceTwo,
+                selectedQuestion.choices.choiceThree,
+                selectedQuestion.correctAnswer,
+                        ]
+            shuffleChoices(randomChoices)
+            setCompletedChoices(randomChoices)
+        }
+
+        if(type === "ungroup"){
+            getQuestion()
+        }else if (type === "group"){
+            getQuestionInQuestionGroup()
+        }
+
         return
     },[])
 

@@ -12,7 +12,7 @@ root.render(
     <BrowserRouter>
     <Routes>
         <Route path='/' element={<App />}/>
-        <Route path='/preview/:_id' element={<QuestionPreview />}/>
+        <Route path='/preview/:_id,:type,:questionIDinQuestionGroup' element={<QuestionPreview />}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

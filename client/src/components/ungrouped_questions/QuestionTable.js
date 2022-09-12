@@ -38,7 +38,7 @@ export default function questionsTable(props){
                     <p className="btn-in-table" onClick={()=>props.openEditQuestion(data._id)}>Edit</p>
                     <p className="btn-in-table" onClick={()=>deleteQuestion(data._id)}>Delete</p>
                     <Link 
-                        to={`preview/${data._id}`} 
+                        to={`preview/${data._id},${'ungroup'},${null}`} 
                         target="_blank">
                         <p className="btn-in-table">Preview</p>
                     </Link>
