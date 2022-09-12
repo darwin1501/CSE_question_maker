@@ -335,6 +335,7 @@ function App() {
             openCreateQuestion={toggleShowCreateQuestionInGroup}
             openEditQuestion={showEditQuestionInQuestionGroup}
             handleClose={closeQuestionsInQuestionGroup}
+            updateUI={refreshQuestionsInQuestionGroup}
             questionGroup={groupedQuestionToModify}/>}
 
           {showCreateQuestionInGroup && <CreateQuestion 

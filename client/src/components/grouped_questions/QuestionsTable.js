@@ -8,6 +8,28 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 
 export default function QuestionsTable(props){
 
+    async function deleteAQuestion(id){
+        // eslint-disable-next-line no-restricted-globals
+        const deleteThis = confirm("Do you want to delete this?")
+        
+        if(deleteThis === true){
+            // remove a question
+            const updatedQuestion = props.questionData.questions.filter((question)=> question._id !== id)
+            const questionData = {...props.questionData, questions: updatedQuestion}
+
+            // call an update
+        await fetch(`http://localhost:5000/grouped-question/update/${props.questionData._id}`, {
+            method: "POST",
+            body: JSON.stringify(questionData),
+            headers: {
+              'Content-Type': 'application/json'
+            },
+          });
+          alert("Question Deleted");
+          props.updateUI();
+        }
+    }
+
     const tableData = props.questionData.questions.map((data)=>{
         return {
             id: data._id,
@@ -16,7 +38,7 @@ export default function QuestionsTable(props){
             action: 
             <div style={{display: "flex", justifyContent: "center", alignItems:"center", gap: "15px"}}>
                 <p className="btn-in-table" onClick={()=>{props.openEditQuestion(data._id)}}>Edit</p>
-                <p className="btn-in-table">Delete</p>
+                <p className="btn-in-table" onClick={()=>{deleteAQuestion(data._id)}}>Delete</p>
                 <p className="btn-in-table">Preview</p>
             </div>
         }
