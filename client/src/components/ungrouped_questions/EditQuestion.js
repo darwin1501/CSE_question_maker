@@ -148,8 +148,7 @@ export default function EditQuestion(props) {
                             <option value="Verbal">Verbal</option>
                             <option value="Philippine Constitution">Philippine Constitution</option>
                             <option value="RA 6713">RA 6713</option>
-                            <option value="Environment management 203
-                                and protection">
+                            <option value="Environment management 203 and protection">
                                 Environment management 203
                                 and protection
                             </option>

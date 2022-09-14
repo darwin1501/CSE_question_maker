@@ -164,8 +164,7 @@ export default function CreateQuestion (props) {
                   </option>
                   <option value='RA 6713'>RA 6713</option>
                   <option
-                    value='Environment management 203
-                              and protection'
+                    value='Environment management 203 and protection'
                     >
                     Environment management 203 and protection
                   </option>
