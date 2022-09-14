@@ -7,11 +7,27 @@ import CreateGroupedQuestion from './components/grouped_questions/CreateGroupedQ
 import EditQuestion from './components/ungrouped_questions/EditQuestion';
 import EditGroupedQuestion from './components/grouped_questions/EditGroupedQuestion';
 import QuestionInGroupModal from './components/grouped_questions/QuestionsInGroupModal';
+import Dashboard from './components/dashboard/Dashboard';
 
 function App() {
   // question count for all questions, and sub category
-  const [questionsCount, setQuestionsCount] = React.useState({
-    totalQuestions: 0
+  const [ungroupQuestionsCount, setUngroupQuestionsCount] = React.useState({
+    totalQuestions: 0,
+    numerical: 0,
+    analitical: 0,
+    verbal: 0,
+    philCon: 0,
+    ra6713: 0,
+    envProtection: 0
+  });
+  const [groupQuestionsCount, setGroupQuestionsCount] = React.useState({
+    totalQuestions: 0,
+    numerical: 0,
+    analitical: 0,
+    verbal: 0,
+    philCon: 0,
+    ra6713: 0,
+    envProtection: 0
   });
   const [showCreateUngroupedQuestion, setShowCreateUngroupedQuestion] = React.useState(false);
   const [showEditUngroupedQuestion, setShowEditUngroupedQuestion] = React.useState(false);
@@ -37,7 +53,6 @@ function App() {
   const [changeQuestionToGroup, setChangeQuestionToGroup] = React.useState(false);
 
   React.useEffect(()=>{
-
     async function getQuestions(){
       const response = await fetch("http://localhost:5000/questions")
       if (!response.ok) {
@@ -47,15 +62,28 @@ function App() {
       }
 
       const questions = await response.json();
+      const totalQuestionCount = Object.keys(questions).length
+      const numericalCount = questions.filter(questions => questions.questionType === "Numerical").length
+      const analiticalCount = questions.filter(questions => questions.questionType === "Analitical").length
+      const verbalCount = questions.filter(questions => questions.questionType === "Verbal").length
+      const philConCount = questions.filter(questions => questions.questionType === "Philippine Constitution").length
+      const ra6713Count = questions.filter(questions => questions.questionType === "RA 6713").length
+      const envProtectionCount = questions.filter(questions => questions.questionType === "Environment management 203 and protection").length
+      const questionsCount = {
+        totalQuestions: totalQuestionCount,
+        numerical: numericalCount,
+        analitical: analiticalCount,
+        verbal: verbalCount,
+        philCon: philConCount,
+        ra6713: ra6713Count,
+        envProtection: envProtectionCount
+      }
 
-      setQuestionsCount((prev)=>{
-        return {...prev, totalQuestions: Object.keys(questions).length}
+      setUngroupQuestionsCount((prev)=>{
+        return {...prev, ...questionsCount}
       })
-
       setTableUngroupedQuestionCount(Object.keys(questions).length);
-
       // sort object here
-
       setUngroupedQuestion(questions);
     }
     getQuestions();
@@ -72,14 +100,59 @@ function App() {
       return;
       }
 
-      const groupedQuestions = await response.json();
+      const questionGroup = await response.json();
+      let totalQuestionCount = 0
+      let numericalCount = 0
+      let analiticalCount = 0
+      let verbalCount = 0
+      let philConCount = 0
+      let ra6713Count = 0
+      let envProtectionCount = 0
 
-      setGroupedQuestions(groupedQuestions);
-      setTableGroupQuestionCount(Object.keys(groupedQuestions).length)
+      // iterate each question group to get the number of questions
+      questionGroup.forEach((questionData)=>  totalQuestionCount += Object.keys(questionData.questions).length)
+
+      questionGroup.filter(questions => questions.questionType === "Numerical")
+      .forEach((question => numericalCount += Object.keys(question.questions).length))
+
+      questionGroup.filter(questions => questions.questionType === "Analitical")
+      .forEach((question => analiticalCount += Object.keys(question.questions).length))
+
+      questionGroup.filter(questions => questions.questionType === "Verbal")
+      .forEach((question => verbalCount += Object.keys(question.questions).length))
+
+      questionGroup.filter(questions => questions.questionType === "Philippine Constitution")
+      .forEach((question => philConCount += Object.keys(question.questions).length))
+
+      questionGroup.filter(questions => questions.questionType === "RA 6713")
+      .forEach((question => ra6713Count += Object.keys(question.questions).length))
+
+      questionGroup.filter(questions => questions.questionType === "Environment management 203 and protection")
+      .forEach((question => envProtectionCount += Object.keys(question.questions).length))
+
+      // const analiticalCount = questionGroup.filter(questions => questions.questionType === "Analitical").length
+      // const verbalCount = questionGroup.filter(questions => questions.questionType === "Verbal").length
+      // const philConCount = questionGroup.filter(questions => questions.questionType === "Philippine Constitution").length
+      // const envProtectionCount = questionGroup.filter(questions => questions.questionType === "Environment management 203 and protection").length
+      const questionsCount = {
+        totalQuestions: totalQuestionCount,
+        numerical: numericalCount,
+        analitical: analiticalCount,
+        verbal: verbalCount,
+        philCon: philConCount,
+        ra6713: ra6713Count,
+        envProtection: envProtectionCount
+      }
+      
+      setGroupQuestionsCount((prev)=>{
+        return {...prev, ...questionsCount}
+      })
+
+      setGroupedQuestions(questionGroup);
+      setTableGroupQuestionCount(Object.keys(questionGroup).length)
   }
       getGroupedQuestions()
   }, [GroupTableUiUpdate])
-
 
   function toogleCreateUngroupedQuestion() {
     setShowCreateUngroupedQuestion(!showCreateUngroupedQuestion)
@@ -155,7 +228,7 @@ function App() {
   function LoadTable(){
     if(changeQuestionToGroup === false){
       return(
-          questionsCount.totalQuestions > 0 && tableUngroupedQuestionCount > 0?
+          ungroupQuestionsCount.totalQuestions > 0 && tableUngroupedQuestionCount > 0?
           <QuestionTable 
             questionsData={ungroupedQuestions} 
             openEditQuestion={openEditUngroupedQuestion}
@@ -277,10 +350,17 @@ function App() {
     <div className="App">
       <main>
         <div className="main-container">
-          <div className="total-question-card card">
-              <h4>Total Question</h4>
-              <h2>{questionsCount.totalQuestions}</h2>
-          </div>
+          {
+          <Dashboard 
+          totalQuestions = {ungroupQuestionsCount.totalQuestions + groupQuestionsCount.totalQuestions}
+          numerical = {ungroupQuestionsCount.numerical + groupQuestionsCount.numerical}
+          analitical = {ungroupQuestionsCount.analitical + groupQuestionsCount.analitical}
+          verbal = {ungroupQuestionsCount.verbal + groupQuestionsCount.verbal}
+          philCon = {ungroupQuestionsCount.philCon + groupQuestionsCount.philCon}
+          ra6713 = {ungroupQuestionsCount.ra6713 + groupQuestionsCount.ra6713}
+          envProtection = {ungroupQuestionsCount.envProtection + groupQuestionsCount.envProtection}
+          />
+          }
           { 
             changeQuestionToGroup ? 
             <button onClick={toggleCreateQuestionGroup}>
