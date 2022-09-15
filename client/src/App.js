@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import './StyleUtils.css';
 import QuestionTable from './components/ungrouped_questions/QuestionTable';
 import GroupedQuestionsTable from './components/grouped_questions/QuestionGroupTable';
 import CreateQuestion from './components/ungrouped_questions/CreateQuestion';
@@ -363,28 +364,30 @@ function App() {
           }
           { 
             changeQuestionToGroup ? 
-            <button onClick={toggleCreateQuestionGroup}>
+            <button className="btn-create btn" onClick={toggleCreateQuestionGroup}>
                 Create Group Question
             </button>
             :
-            <button onClick={toogleCreateUngroupedQuestion}>
+            <button className="btn-create btn" onClick={toogleCreateUngroupedQuestion}>
               Create Question
             </button>
           }
             <br></br>
             <br></br>
-          {
-            changeQuestionToGroup ?
-            <input type="text" placeholder="Search a group name" onInput={findGroupedQuestion}/>  :
-            <input type="text" placeholder="Search a question" onInput={findUngroupedQuestion}/>
-          }
-          <button onClick={swtichQuestion}>
-              Switch to
-              {
-                changeQuestionToGroup ? ' Ungrouped ' : ' Grouped  '
-              }
-              Question
-          </button>
+          <div style={{display: "flex", gap: "100px"}}>
+            <button className="btn" onClick={swtichQuestion}>
+                Switch to
+                {
+                  changeQuestionToGroup ? ' Ungrouped ' : ' Grouped  '
+                }
+                Question
+            </button>
+            {
+              changeQuestionToGroup ?
+              <input className="search-bar" type="text" placeholder="Search a group name" onInput={findGroupedQuestion}/>  :
+              <input className="search-bar" type="text" placeholder="Search a question" onInput={findUngroupedQuestion}/>
+            }
+          </div>
           <div className='table-container'>
             {
               <LoadTable />

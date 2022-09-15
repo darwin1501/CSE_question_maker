@@ -68,7 +68,7 @@ export default function QuestionsTable(props){
 
 
     return(
-        <div>
+        <div style={{marginTop: "40px"}}>
             { <BootstrapTable 
                 keyField="id" 
                 data={ tableData } 

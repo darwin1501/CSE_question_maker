@@ -68,52 +68,54 @@ export default function EditGroupedQuestion(props) {
     return(
         <div>
             <div className="modal-container">
-                <div className="card-modal-content">
-                    <div style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        alignItems: "center"
-                    }}>
-                        <button onClick={()=>{
+                <div className="card-modal-content card-sm">
+                    <div className="flex flex-end">
+                        <button  className="btn-close" onClick={()=>{
                           props.closeEditQuestion()
                         }}>
-                            x
                         </button>
                     </div>
+                    <h4 style={{textAlign: "center", fontSize: "20px", marginBottom: "20px"}}>
+                    Edit Group Question
+                    </h4>
                     <form onSubmit={updateQuestion}>
-                    <select name="questionType" value={formData.questionType} required onChange={changeFormData} onBlur={formatFormData}>
-                        <option value="">---Select Category---</option>
-                        <option value="Numerical">Numerical</option>
-                        <option value="Analitical">Analitical</option>
-                        <option value="Verbal">Verbal</option>
-                        <option value="Philippine Constitution">Philippine Constitution</option>
-                        <option value="RA 6713">RA 6713</option>
-                        <option value="Environment management 203 and protection">
-                            Environment management 203
-                            and protection
-                        </option>
-                    </select>
-                    <label>
-                        Group Name
-                        <input  name="groupName" value={formData.groupName} onChange={changeFormData} onBlur={formatFormData} required/>
-                    </label>
-                    <select name="referenceType" value={formData.referenceType} onChange={changeFormData} onBlur={formatFormData} required>
-                        <option value="">---Select Reference Type---</option>
-                        <option value="text">Text</option>
-                        <option value="image">Image</option>
-                    </select>
-                    {
-                        formData.referenceType === "text" ? 
-                        <label>
-                            Question Reference
-                            <textarea name="questionReference" value={formData.questionReference} onChange={changeFormData} onBlur={formatFormData} required/>
-                        </label> :
-                        <label>
-                            Image as Reference
-                            <input name="imageUrlAsReference" value={formData.imageUrlAsReference} onChange={changeFormData} onBlur={formatFormData} placeholder="Image Url" required/>
-                        </label>
-                    }
-                    <input type="submit" value="Update" />
+                      <div className="flex flex-vertical gap-sm">
+                          <select name="questionType" value={formData.questionType} onChange={changeFormData} onBlur={formatFormData} required>
+                              <option value="">---Select Category---</option>
+                              <option value="Numerical">Numerical</option>
+                              <option value="Analitical">Analitical</option>
+                              <option value="Verbal">Verbal</option>
+                              <option value="Philippine Constitution">Philippine Constitution</option>
+                              <option value="RA 6713">RA 6713</option>
+                              <option value="Environment management 203 and protection">
+                                  Environment management 203
+                                  and protection
+                              </option>
+                          </select>
+                          <label className="flex flex-vertical gap-sm">
+                              Group Name
+                              <input  name="groupName" value={formData.groupName} onChange={changeFormData} onBlur={formatFormData} required/>
+                          </label>
+                          <select name="referenceType" value={formData.referenceType}  onChange={changeFormData} onBlur={formatFormData} required>
+                              <option value="">---Select Reference Type---</option>
+                              <option value="text">Text</option>
+                              <option value="image">Image</option>
+                          </select>
+                          {
+                              formData.referenceType === "text" ? 
+                              <label className="flex flex-vertical gap-sm">
+                                  Question Reference
+                                  <textarea name="questionReference" value={formData.questionReference}  onChange={changeFormData} onBlur={formatFormData} required/>
+                              </label> :
+                              <label className="flex flex-vertical gap-sm">
+                                  Image as Reference
+                                  <input name="imageUrlAsReference" value={formData.imageUrlAsReference}  onChange={changeFormData} onBlur={formatFormData} placeholder="Image Url" required/>
+                              </label>
+                          }
+                      </div>
+                      <div className="flex flex-end" style={{marginTop: "20px"}}>
+                        <input className="btn" type="submit" value="Update" />
+                      </div>
                     </form>
                 </div>
             </div>

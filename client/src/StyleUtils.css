@@ -1,0 +1,31 @@
+.card-sm{
+    width: 500px;
+    height: 590px;
+}
+.card-md{
+    width: 940px;
+    height: 560px;
+}
+.card-lg{
+    width: 1000px;
+    height: 500px;
+}
+.flex{
+    display: flex;
+}
+.flex-vertical{
+    flex-direction: column;
+    gap: 10px;
+  }
+.flex-center{
+    justify-content: center;
+    }
+.flex-end{
+    justify-content: flex-end;
+}
+.gap-sm{
+    gap: 20px;
+}
+.gap-md{
+    gap: 40px;
+}

@@ -4,29 +4,32 @@ body{
   background-color: #E5E5E5;
   margin-bottom: 300px !important;
 }
+.btn{
+  padding: 20px;
+  border-radius: 5px;
+  border: 2px solid black !important;
+}
+.btn-close{
+  display: inline-block !important;
+  content: "\00d7" !important;
+  top: 0;
+  right: 0;
+  position: relative;
+}
 .card{
   border-radius: 5px;
 }
 .card-modal-content{
   background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
+  margin:auto;
+  padding: 30px;
   border: 1px solid #888;
-  width: 400px;
-  height: 500px;
-}
-.card-modal-content-md{
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 1000px;
-  height: 500px;
+  border-radius: 10px;
 }
 .modal-container{
   position: fixed; /* Stay in place */
   z-index: 5; /*Sit on top */
-  padding-top: 100px; /* Location of the box */
+  padding-top: 50px; /* Location of the box */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -88,11 +91,34 @@ tr:nth-child(even) {background-color: #f2f2f2;}
   overflow: hidden !important;
   text-overflow: ellipsis !important;
 } */
-
+.search-bar{
+  padding: 5px;
+  border-radius: 40px;
+  text-align: center;
+  width: 400px;
+  border: none;
+  background: #e2e2e2;
+}
+select{
+  padding: 5px;
+  border-radius: 5px;
+}
 .table-container{
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 20px;
+}
+textarea{
+  padding: 5px;
+  border-radius: 5px;
+  border: 2px solid rgb(115, 114, 114) !important;
+  height: 140px;
+  width: 400px;
+}
+.text-input{
+  padding: 5px;
+  border-radius: 5px;
+  border: 2px solid rgb(115, 114, 114) !important;
 }
 

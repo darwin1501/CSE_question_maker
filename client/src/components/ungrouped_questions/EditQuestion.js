@@ -126,59 +126,126 @@ export default function EditQuestion(props) {
     return(
         <div>
             <div className="modal-container">
-                    <div className="card-modal-content">
+                    <div className="card-modal-content card-md">
                     <div style={{
                         display: "flex",
                         justifyContent: "flex-end",
                         alignItems: "center"
                     }}>
-                        <button onClick={()=>{props.handleClose()}}>
-                            x
-                        </button>
+                        <div className="flex flex-end">
+                          <button className="btn-close"  onClick={()=>{props.handleClose()}}>
+                          </button>
+                        </div>
                     </div>
                     <h4 style={{textAlign: "center", fontSize: "20px"}}>
                         Edit Question
                     </h4>
                     <form onSubmit={updateQuestion}>
-                        { questionType === "ungroup" && 
-                         <select name="questionType" value={formData.questionType} onChange={changeFormData} onBlur={formatFormData}>
-                            <option value="">---Select Category---</option>
-                            <option value="Numerical">Numerical</option>
-                            <option value="Analitical">Analitical</option>
-                            <option value="Verbal">Verbal</option>
-                            <option value="Philippine Constitution">Philippine Constitution</option>
-                            <option value="RA 6713">RA 6713</option>
-                            <option value="Environment management 203 and protection">
-                                Environment management 203
-                                and protection
-                            </option>
-                        </select> 
-                        }
-                        <label>
-                            Question
-                            <textarea name="question" value={formData.question} onChange={changeFormData} onBlur={formatFormData}/>
-                        </label>
-                        <label>
-                            Correct Answer
-                            <input type="text" name="correctAnswer" value={formData.correctAnswer} onChange={changeFormData} onBlur={formatFormData}/>
-                        </label>
-                        <label>
-                            Choice One
-                            <input type="text" name="choiceOne" value={formData.choices.choiceOne} onChange={changeFormData} onBlur={formatFormData}/>
-                        </label>
-                        <label>
-                            Choice Two
-                            <input type="text" name="choiceTwo" value={formData.choices.choiceTwo} onChange={changeFormData} onBlur={formatFormData}/>
-                        </label>
-                        <label>
-                            Choice Three
-                            <input type="text" name="choiceThree" value={formData.choices.choiceThree} onChange={changeFormData} onBlur={formatFormData}/>
-                        </label>
-                        <label>
-                            Explantion
-                            <textarea name="explanation" value={formData.explanation} onChange={changeFormData} onBlur={formatFormData}/>
-                        </label>
-                        <input type="submit" value="Update" />
+                      <div className="flex flex-center gap-sm">
+                        <div>
+                            {props.type === "ungroup" && 
+                              <div style={{marginBottom: "10px"}}>
+                                <select
+                                name='questionType'
+                                value={formData.questionType}
+                                onChange={changeFormData}
+                                onBlur={formatFormData}
+                                required
+                                >
+                                    <option value=''>---Select Category---</option>
+                                    <option value='Numerical'>Numerical</option>
+                                    <option value='Analitical'>Analitical</option>
+                                    <option value='Verbal'>Verbal</option>
+                                    <option value='Philippine Constitution'>
+                                      Philippine Constitution
+                                    </option>
+                                    <option value='RA 6713'>RA 6713</option>
+                                    <option
+                                      value='Environment management 203 and protection'
+                                      >
+                                      Environment management 203 and protection
+                                    </option>
+                                </select>
+                              </div>
+                            }
+                            <label className="flex flex-vertical">
+                              Correct Answer
+                              <input
+                                className="text-input"
+                                type='text'
+                                name='correctAnswer'
+                                value={formData.correctAnswer}
+                                onChange={changeFormData}
+                                onBlur={formatFormData}
+                                required
+                              />
+                            </label>
+                            
+                            <label className="flex flex-vertical">
+                              Choice One
+                              <input
+                                className="text-input"
+                                type='text'
+                                name='choiceOne'
+                                value={formData.choices.choiceOne}
+                                onChange={changeFormData}
+                                onBlur={formatFormData}
+                                required
+                              />
+                            </label>
+                
+                            <label className="flex flex-vertical">
+                              Choice Two
+                              <input
+                                className="text-input"
+                                type='text'
+                                name='choiceTwo'
+                                value={formData.choices.choiceTwo}
+                                onChange={changeFormData}
+                                onBlur={formatFormData}
+                              />
+                            </label>
+                
+                            <label className="flex flex-vertical">
+                              Choice Three
+                              <input
+                                className="text-input"
+                                type='text'
+                                name='choiceThree'
+                                value={formData.choices.choiceThree}
+                                onChange={changeFormData}
+                                onBlur={formatFormData}
+                                required
+                              />
+                            </label>
+                        </div>
+              
+                          <div>
+                            <label className="flex flex-vertical">
+                              Question
+                              <textarea
+                                value={formData.question}
+                                name='question'
+                                onChange={changeFormData}
+                                onBlur={formatFormData}
+                                required
+                              />
+                            </label>
+                            <label className="flex flex-vertical">
+                              Explantion
+                              <textarea
+                                value={formData.explanation}
+                                name='explanation'
+                                onChange={changeFormData}
+                                onBlur={formatFormData}
+                                required
+                              />
+                            </label>
+                          </div>
+                      </div>
+                      <div className="flex flex-end" style={{marginTop: "20px"}}>
+                          <input className='btn' type="submit" value="Update" />
+                      </div>
                     </form>
                     </div>
             </div>
