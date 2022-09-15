@@ -6,13 +6,13 @@ export default function QuestionPreview () {
     const { _id, type, questionIDinQuestionGroup} = useParams()
     const [questionData, setQuestionData] = React.useState({
         question:"",
-      questionType:"",
-      correctAnswer:"",
-      choices: {
-        choiceOne:"",
-        choiceTwo:"",
-        choiceThree:""
-      },
+        questionType:"",
+        correctAnswer:"",
+        choices: {
+            choiceOne:"",
+            choiceTwo:"",
+            choiceThree:""
+        },
       explanation: "",
     })
 
@@ -21,6 +21,7 @@ export default function QuestionPreview () {
     const { question, questionType, correctAnswer, explanation } = questionData
     const [completeChoices, setCompletedChoices] = React.useState([])
     const [disableButton, setDisableButton] = React.useState(false)
+    const [hasImageToLoad, sethasImageToLoad] = React.useState(false)
 
     const shuffleChoices = array => {
         for (let i = array.length - 1; i > 0; i--) {
@@ -76,8 +77,16 @@ export default function QuestionPreview () {
               }
         
               const result = await response.json();
-              const questions = result.questions;
-              const selectedQuestion = questions.filter((question)=> question._id === questionIDinQuestionGroup)[0]
+              const questionGroup = result.questions;
+              const selectedQuestion = questionGroup.filter((question)=> question._id === questionIDinQuestionGroup)[0]
+
+              const hasImage = questionGroup.hasImage
+
+              if(hasImage === true){
+                sethasImageToLoad(true)
+              }else{
+                sethasImageToLoad(false)
+              }
 
               setQuestionData((prev)=>{
                 return {...prev, ...selectedQuestion}
@@ -111,6 +120,7 @@ export default function QuestionPreview () {
         event.target.disableButton = false
     }
 
+    console.log(hasImageToLoad)
     return (
         <main className={PreviewStyle.bg}>
             <div className={PreviewStyle.container}>
