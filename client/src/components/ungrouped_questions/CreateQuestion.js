@@ -165,6 +165,11 @@ export default function CreateQuestion (props) {
                           >
                           Environment management 203 and protection
                         </option>
+                        <option
+                          value="Peace and Human Rights Issues and Concepts"
+                          >
+                          Peace and Human Rights Issues and Concepts
+                        </option>
                     </select>
                   </div>
                 }

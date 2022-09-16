@@ -29,6 +29,10 @@ export default function Dashboard(props) {
                     <p>Environment management 203 and protection</p> 
                 <p className={DashboardStyle.bold}>{props.envProtection}</p>
                 </div>
+                <div className={DashboardStyle.flex}>
+                    <p>Peace and Human Rights Issues and Concepts</p> 
+                <p className={DashboardStyle.bold}>{props.humanRights}</p>
+                </div>
             </div>
         </div>
     )

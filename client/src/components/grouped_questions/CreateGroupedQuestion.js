@@ -99,6 +99,11 @@ export default function CreateGroupedQuestion(props) {
                                 Environment management 203
                                 and protection
                             </option>
+                            <option
+                                value="Peace and Human Rights Issues and Concepts"
+                                >
+                                Peace and Human Rights Issues and Concepts
+                            </option>
                         </select>
                         <label className="flex flex-vertical gap-sm">
                             Group Name

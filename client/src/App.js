@@ -19,7 +19,8 @@ function App() {
     verbal: 0,
     philCon: 0,
     ra6713: 0,
-    envProtection: 0
+    envProtection: 0,
+    humanRights: 0
   });
   const [groupQuestionsCount, setGroupQuestionsCount] = React.useState({
     totalQuestions: 0,
@@ -28,7 +29,8 @@ function App() {
     verbal: 0,
     philCon: 0,
     ra6713: 0,
-    envProtection: 0
+    envProtection: 0,
+    humanRights: 0
   });
   const [showCreateUngroupedQuestion, setShowCreateUngroupedQuestion] = React.useState(false);
   const [showEditUngroupedQuestion, setShowEditUngroupedQuestion] = React.useState(false);
@@ -70,6 +72,7 @@ function App() {
       const philConCount = questions.filter(questions => questions.questionType === "Philippine Constitution").length
       const ra6713Count = questions.filter(questions => questions.questionType === "RA 6713").length
       const envProtectionCount = questions.filter(questions => questions.questionType === "Environment management 203 and protection").length
+      const humanRightsCount = questions.filter(questions => questions.questionType === "Peace and Human Rights Issues and Concepts").length
       const questionsCount = {
         totalQuestions: totalQuestionCount,
         numerical: numericalCount,
@@ -77,7 +80,8 @@ function App() {
         verbal: verbalCount,
         philCon: philConCount,
         ra6713: ra6713Count,
-        envProtection: envProtectionCount
+        envProtection: envProtectionCount,
+        humanRights: humanRightsCount
       }
 
       setUngroupQuestionsCount((prev)=>{
@@ -109,6 +113,7 @@ function App() {
       let philConCount = 0
       let ra6713Count = 0
       let envProtectionCount = 0
+      let humanRightsCount = 0
 
       // iterate each question group to get the number of questions
       questionGroup.forEach((questionData)=>  totalQuestionCount += Object.keys(questionData.questions).length)
@@ -131,6 +136,10 @@ function App() {
       questionGroup.filter(questions => questions.questionType === "Environment management 203 and protection")
       .forEach((question => envProtectionCount += Object.keys(question.questions).length))
 
+      questionGroup.filter(questions => questions.questionType === "Peace and Human Rights Issues and Concepts")
+      .forEach((question => humanRightsCount += Object.keys(question.questions).length))
+      //Peace and Human Rights Issues and Concepts
+
       // const analiticalCount = questionGroup.filter(questions => questions.questionType === "Analitical").length
       // const verbalCount = questionGroup.filter(questions => questions.questionType === "Verbal").length
       // const philConCount = questionGroup.filter(questions => questions.questionType === "Philippine Constitution").length
@@ -142,7 +151,8 @@ function App() {
         verbal: verbalCount,
         philCon: philConCount,
         ra6713: ra6713Count,
-        envProtection: envProtectionCount
+        envProtection: envProtectionCount,
+        humanRights: humanRightsCount
       }
       
       setGroupQuestionsCount((prev)=>{
@@ -360,6 +370,7 @@ function App() {
           philCon = {ungroupQuestionsCount.philCon + groupQuestionsCount.philCon}
           ra6713 = {ungroupQuestionsCount.ra6713 + groupQuestionsCount.ra6713}
           envProtection = {ungroupQuestionsCount.envProtection + groupQuestionsCount.envProtection}
+          humanRights = {ungroupQuestionsCount.humanRights + groupQuestionsCount.humanRights}
           />
           }
           { 
