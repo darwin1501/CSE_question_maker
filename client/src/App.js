@@ -15,7 +15,7 @@ function App() {
   const [ungroupQuestionsCount, setUngroupQuestionsCount] = React.useState({
     totalQuestions: 0,
     numerical: 0,
-    analitical: 0,
+    analytical: 0,
     verbal: 0,
     philCon: 0,
     ra6713: 0,
@@ -24,7 +24,7 @@ function App() {
   const [groupQuestionsCount, setGroupQuestionsCount] = React.useState({
     totalQuestions: 0,
     numerical: 0,
-    analitical: 0,
+    analytical: 0,
     verbal: 0,
     philCon: 0,
     ra6713: 0,
@@ -65,7 +65,7 @@ function App() {
       const questions = await response.json();
       const totalQuestionCount = Object.keys(questions).length
       const numericalCount = questions.filter(questions => questions.questionType === "Numerical").length
-      const analiticalCount = questions.filter(questions => questions.questionType === "Analitical").length
+      const analyticalCount = questions.filter(questions => questions.questionType === "Analytical").length
       const verbalCount = questions.filter(questions => questions.questionType === "Verbal").length
       const philConCount = questions.filter(questions => questions.questionType === "Philippine Constitution").length
       const ra6713Count = questions.filter(questions => questions.questionType === "RA 6713").length
@@ -73,7 +73,7 @@ function App() {
       const questionsCount = {
         totalQuestions: totalQuestionCount,
         numerical: numericalCount,
-        analitical: analiticalCount,
+        analytical: analyticalCount,
         verbal: verbalCount,
         philCon: philConCount,
         ra6713: ra6713Count,
@@ -104,7 +104,7 @@ function App() {
       const questionGroup = await response.json();
       let totalQuestionCount = 0
       let numericalCount = 0
-      let analiticalCount = 0
+      let analyticalCount = 0
       let verbalCount = 0
       let philConCount = 0
       let ra6713Count = 0
@@ -116,8 +116,8 @@ function App() {
       questionGroup.filter(questions => questions.questionType === "Numerical")
       .forEach((question => numericalCount += Object.keys(question.questions).length))
 
-      questionGroup.filter(questions => questions.questionType === "Analitical")
-      .forEach((question => analiticalCount += Object.keys(question.questions).length))
+      questionGroup.filter(questions => questions.questionType === "Analytical")
+      .forEach((question => analyticalCount += Object.keys(question.questions).length))
 
       questionGroup.filter(questions => questions.questionType === "Verbal")
       .forEach((question => verbalCount += Object.keys(question.questions).length))
@@ -138,7 +138,7 @@ function App() {
       const questionsCount = {
         totalQuestions: totalQuestionCount,
         numerical: numericalCount,
-        analitical: analiticalCount,
+        analytical: analyticalCount,
         verbal: verbalCount,
         philCon: philConCount,
         ra6713: ra6713Count,
@@ -355,7 +355,7 @@ function App() {
           <Dashboard 
           totalQuestions = {ungroupQuestionsCount.totalQuestions + groupQuestionsCount.totalQuestions}
           numerical = {ungroupQuestionsCount.numerical + groupQuestionsCount.numerical}
-          analitical = {ungroupQuestionsCount.analitical + groupQuestionsCount.analitical}
+          analytical = {ungroupQuestionsCount.analytical + groupQuestionsCount.analytical}
           verbal = {ungroupQuestionsCount.verbal + groupQuestionsCount.verbal}
           philCon = {ungroupQuestionsCount.philCon + groupQuestionsCount.philCon}
           ra6713 = {ungroupQuestionsCount.ra6713 + groupQuestionsCount.ra6713}

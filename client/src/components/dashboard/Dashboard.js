@@ -14,7 +14,7 @@ export default function Dashboard(props) {
                     <p>Numerical:</p> <p className={DashboardStyle.bold}>{props.numerical}</p>
                 </div>
                 <div className={DashboardStyle.flex}>
-                    <p>Analitical:</p> <p className={DashboardStyle.bold}>{props.analitical}</p>
+                    <p>Analytical:</p> <p className={DashboardStyle.bold}>{props.analytical}</p>
                 </div>
                 <div className={DashboardStyle.flex}>
                     <p>Verbal:</p> <p className={DashboardStyle.bold}>{props.verbal}</p>

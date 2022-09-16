@@ -91,7 +91,7 @@ export default function CreateGroupedQuestion(props) {
                         <select name="questionType" value={formData.questionType} onChange={changeFormData} onBlur={formatFormData} required>
                             <option value="">---Select Category---</option>
                             <option value="Numerical">Numerical</option>
-                            <option value="Analitical">Analitical</option>
+                            <option value="Analytical">Analytical</option>
                             <option value="Verbal">Verbal</option>
                             <option value="Philippine Constitution">Philippine Constitution</option>
                             <option value="RA 6713">RA 6713</option>
