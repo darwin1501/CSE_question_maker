@@ -133,7 +133,6 @@ recordRoutes.route("/grouped-question/add").post(function (req, response) {
   let db_connect = dbo.getDb();
   let myobj = {
     questionReference: req.body.questionReference,
-    hasImage: req.body.hasImage,
     imageUrlAsReference: req.body.imageUrlAsReference,
     questionType: req.body.questionType,
     referenceType: req.body.referenceType,
@@ -171,14 +170,13 @@ recordRoutes.route("/grouped-question/:id").get(function (req, res) {
         res.json(result);
       });
 });
-
+// update question group
 recordRoutes.route("/grouped-question/update/:id").post(function (req, response) {
   let db_connect = dbo.getDb();
   let myquery = { _id: ObjectId( req.params.id )};
   let newvalues = {
     $set: {
       questionReference: req.body.questionReference,
-      hasImage: req.body.hasImage,
       imageUrlAsReference: req.body.imageUrlAsReference,
       questionType: req.body.questionType,
       referenceType: req.body.referenceType,
@@ -253,7 +251,6 @@ recordRoutes.route("/grouped-question-add-question/add/:id").post(function (req,
   let newvalues = {
     $set: {
       questionReference: req.body.questionReference,
-      hasImage: req.body.hasImage,
       imageUrlAsReference: req.body.imageUrlAsReference,
       questionType: req.body.questionType,
       referenceType: req.body.referenceType,

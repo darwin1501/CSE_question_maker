@@ -15,6 +15,7 @@ export default function QuestionPreview () {
         },
       explanation: "",
     })
+    const [questionReference, setQuestionReference] = React.useState("");
 
     const [showExplanation, setShowExplanation] = React.useState(false)
     const [selected, setSelected] = React.useState("")
@@ -80,12 +81,14 @@ export default function QuestionPreview () {
               const questionGroup = result.questions;
               const selectedQuestion = questionGroup.filter((question)=> question._id === questionIDinQuestionGroup)[0]
 
-              const hasImage = questionGroup.hasImage
+              const referenceType = result.referenceType
 
-              if(hasImage === true){
+              if(referenceType === "image"){
                 sethasImageToLoad(true)
+                setQuestionReference(result.imageUrlAsReference)
               }else{
                 sethasImageToLoad(false)
+                setQuestionReference(result.questionReference)
               }
 
               setQuestionData((prev)=>{
@@ -120,7 +123,6 @@ export default function QuestionPreview () {
         event.target.disableButton = false
     }
 
-    console.log(hasImageToLoad)
     return (
         <main className={PreviewStyle.bg}>
             <div className={PreviewStyle.container}>
@@ -132,12 +134,23 @@ export default function QuestionPreview () {
                                 opacity:"0.7"
                         }}>{questionType}</p>
                     </div>
-                    {/* question */}
+
+                    <div className="flex flex-center">
+                        {hasImageToLoad === true ? 
+                            <img src={`${questionReference}`} 
+                            alt="question reference" 
+                            style ={{
+                                width: "30%"}}/>
+                             : 
+                            <p>{questionReference}</p>
+                        }
+                    </div>
                 <div className={`${PreviewStyle.flex_center} ${PreviewStyle.question_text}`}
                     style={{
                         marginBottom: "20px"
                     }}>
-                    <p>{question}</p>
+                        
+                    <p style={{marginTop: "40px", marginBottom: "20px"}}>{question}</p>
                 </div>
                 <div className={`${PreviewStyle.flex_center}`}>
                     <div style={{

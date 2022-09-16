@@ -46,13 +46,7 @@ export default function EditGroupedQuestion(props) {
     const value = event.target.value;
     
     setFormData((prev)=>{
-      // conditional setting of values on question reference
-      // conditional setting of values on question reference
-      if(name === "referenceType" && value === "image"){
-        return{...prev, [name]:value, hasImage:true, dateModified: new Date()};
-      }else{
-        return{...prev, [name]:value, hasImage:false, dateModified: new Date()};
-      }
+        return{...prev, [name]:value, dateModified: new Date()};      
       });
     }
 

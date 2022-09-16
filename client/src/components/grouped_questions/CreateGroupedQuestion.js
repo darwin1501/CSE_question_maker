@@ -3,11 +3,11 @@ import Checker from '../../utility_module/checker';
 
 export default function CreateGroupedQuestion(props) {
 
+
     const [formData, setFormData] = React.useState({
         questionReference: "",
-        hasImage: false,
         imageUrlAsReference: "",
-        referenceType: "text",
+        referenceType: "",
         groupName: "",
         questionType: "",
         questions: [],
@@ -19,7 +19,7 @@ export default function CreateGroupedQuestion(props) {
         const value = event.target.value.trim();
         
         setFormData((prev)=>{
-            return{...prev, [name]:value, dateModified: new Date()};
+                return{...prev, [name]:value, dateModified: new Date()};
           });
       }
     
@@ -29,12 +29,9 @@ export default function CreateGroupedQuestion(props) {
         
         setFormData((prev)=>{
             // conditional setting of values on question reference
-            if(name === "referenceType" && value === "image"){
-                return{...prev, [name]:value, hasImage:true,  dateModified: new Date()};
-            }else{
-                return{...prev, [name]:value, hasImage:false, dateModified: new Date()};
-            }
-          });
+                return{...prev, [name]:value, dateModified: new Date()};
+
+        });
     }
 
     async function createGroupedQuestion(event){
@@ -62,6 +59,18 @@ export default function CreateGroupedQuestion(props) {
         }else{
             alert("Error: Group Name Already Exist");
         }
+    }
+
+    function testFormData(event){
+        event.preventDefault();
+        if(formData.referenceType === "image"){
+            setFormData((prev)=>{
+                // conditional setting of values on question reference
+                    return{...prev, hasImage: true};
+            });
+        }
+
+        console.log(formData)
     }
 
     return(
