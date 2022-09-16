@@ -161,9 +161,9 @@ export default function EditQuestion(props) {
                                     </option>
                                     <option value='RA 6713'>RA 6713</option>
                                     <option
-                                      value='Environment management 203 and protection'
+                                      value='Environment management and protection'
                                       >
-                                      Environment management 203 and protection
+                                      Environment management and protection
                                     </option>
                                     <option
                                       value="Peace and Human Rights Issues and Concepts"

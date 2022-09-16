@@ -26,7 +26,7 @@ export default function Dashboard(props) {
                     <p>(RA 6713)</p> <p className={DashboardStyle.bold}>{props.ra6713}</p>
                 </div>
                 <div className={DashboardStyle.flex}>
-                    <p>Environment management 203 and protection</p> 
+                    <p>Environment management and protection</p> 
                 <p className={DashboardStyle.bold}>{props.envProtection}</p>
                 </div>
                 <div className={DashboardStyle.flex}>

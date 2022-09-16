@@ -71,7 +71,7 @@ function App() {
       const verbalCount = questions.filter(questions => questions.questionType === "Verbal").length
       const philConCount = questions.filter(questions => questions.questionType === "Philippine Constitution").length
       const ra6713Count = questions.filter(questions => questions.questionType === "RA 6713").length
-      const envProtectionCount = questions.filter(questions => questions.questionType === "Environment management 203 and protection").length
+      const envProtectionCount = questions.filter(questions => questions.questionType === "Environment management and protection").length
       const humanRightsCount = questions.filter(questions => questions.questionType === "Peace and Human Rights Issues and Concepts").length
       const questionsCount = {
         totalQuestions: totalQuestionCount,
@@ -133,7 +133,7 @@ function App() {
       questionGroup.filter(questions => questions.questionType === "RA 6713")
       .forEach((question => ra6713Count += Object.keys(question.questions).length))
 
-      questionGroup.filter(questions => questions.questionType === "Environment management 203 and protection")
+      questionGroup.filter(questions => questions.questionType === "Environment management and protection")
       .forEach((question => envProtectionCount += Object.keys(question.questions).length))
 
       questionGroup.filter(questions => questions.questionType === "Peace and Human Rights Issues and Concepts")
