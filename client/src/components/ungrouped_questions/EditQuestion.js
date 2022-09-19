@@ -201,18 +201,6 @@ export default function EditQuestion(props) {
                               <option value="Unknown">Unknown</option>
                               <option value="Leonalyn Mutia Tayone">Leonalyn Mutia-Tayone</option>
                             </select>
-                            <label className="flex flex-vertical">
-                              Correct Answer
-                              <input
-                                className="text-input"
-                                type='text'
-                                name='correctAnswer'
-                                value={formData.correctAnswer}
-                                onChange={changeFormData}
-                                onBlur={formatFormData}
-                                required
-                              />
-                            </label>
                             
                             <label className="flex flex-vertical">
                               Choice One
@@ -246,6 +234,19 @@ export default function EditQuestion(props) {
                                 type='text'
                                 name='choiceThree'
                                 value={formData.choices.choiceThree}
+                                onChange={changeFormData}
+                                onBlur={formatFormData}
+                                required
+                              />
+                            </label>
+
+                            <label className="flex flex-vertical" style={{marginTop: "40px"}}>
+                              Correct Answer
+                              <input
+                                className="text-input"
+                                type='text'
+                                name='correctAnswer'
+                                value={formData.correctAnswer}
                                 onChange={changeFormData}
                                 onBlur={formatFormData}
                                 required

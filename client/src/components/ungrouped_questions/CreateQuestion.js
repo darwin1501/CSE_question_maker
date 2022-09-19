@@ -187,19 +187,6 @@ export default function CreateQuestion (props) {
                   </div>
                 }
                 <label className="flex flex-vertical">
-                  Correct Answer
-                  <input
-                    className="text-input"
-                    type='text'
-                    name='correctAnswer'
-                    value={formData.correctAnswer}
-                    onChange={changeFormData}
-                    onBlur={formatFormData}
-                    required
-                  />
-                </label>
-                
-                <label className="flex flex-vertical">
                   Choice One
                   <input
                     className="text-input"
@@ -231,6 +218,19 @@ export default function CreateQuestion (props) {
                     type='text'
                     name='choiceThree'
                     value={formData.choices.choiceThree}
+                    onChange={changeFormData}
+                    onBlur={formatFormData}
+                    required
+                  />
+                </label>
+
+                <label className="flex flex-vertical" style={{marginTop: "40px"}}>
+                  Correct Answer
+                  <input
+                    className="text-input"
+                    type='text'
+                    name='correctAnswer'
+                    value={formData.correctAnswer}
                     onChange={changeFormData}
                     onBlur={formatFormData}
                     required
