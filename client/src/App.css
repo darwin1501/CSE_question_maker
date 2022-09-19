@@ -41,14 +41,6 @@ body{
 .bring-to-front{
   z-index: 10 !important;
 }
-/* .modal-content{
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 400px;
-  height: 500px;
-} */
 form{
   display: block !important;
 }
