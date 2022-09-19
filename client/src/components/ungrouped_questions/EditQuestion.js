@@ -196,6 +196,11 @@ export default function EditQuestion(props) {
                                 </select>
                               </div>
                             }
+                            <select name="contributor" value={formData.contributor} onChange={changeFormData}>
+                              <option value="">Select Contributor</option>
+                              <option value="Unknown">Unknown</option>
+                              <option value="Leonalyn Mutia Tayone">Leonalyn Mutia-Tayone</option>
+                            </select>
                             <label className="flex flex-vertical">
                               Correct Answer
                               <input

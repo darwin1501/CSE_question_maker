@@ -4,6 +4,7 @@ import { nanoid } from 'nanoid'
 
 export default function CreateQuestion (props) {
 
+  const contributor = props.contributor
   const [hasExplanation, setHasExplanation] = React.useState(false);
   const [formData, setFormData] = React.useState({
     question: '',
@@ -15,7 +16,8 @@ export default function CreateQuestion (props) {
       choiceThree: ''
     },
     explanation: '',
-    dateModified: new Date()
+    dateModified: new Date(),
+    contributor: contributor
   })
 
   function formatFormData (event) {

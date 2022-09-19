@@ -54,6 +54,7 @@ function App() {
   const [openEditQuestionInQuestionGroup, setOpenEditQuestionInQuestionGroup] = React.useState(false);
 
   const [changeQuestionToGroup, setChangeQuestionToGroup] = React.useState(false);
+  const [contributor, setContributor] = React.useState("");
 
   React.useEffect(()=>{
     async function getQuestions(){
@@ -164,6 +165,12 @@ function App() {
   }
       getGroupedQuestions()
   }, [GroupTableUiUpdate])
+
+  function handleSetContributor(event){
+    const value = event.target.value
+
+    setContributor(value)
+  }
 
   function toogleCreateUngroupedQuestion() {
     setShowCreateUngroupedQuestion(!showCreateUngroupedQuestion)
@@ -398,6 +405,11 @@ function App() {
               <input className="search-bar" type="text" placeholder="Search a group name" onInput={findGroupedQuestion}/>  :
               <input className="search-bar" type="text" placeholder="Search a question" onInput={findUngroupedQuestion}/>
             }
+            <select name="contributor" value={contributor} onChange={handleSetContributor}>
+              <option value="">Select Contributor</option>
+              <option value="Unknown">Unknown</option>
+              <option value="Leonalyn Mutia Tayone">Leonalyn Mutia-Tayone</option>
+            </select>
           </div>
           <div className='table-container'>
             {
@@ -405,12 +417,13 @@ function App() {
             }
           </div>
           
-          { showCreateUngroupedQuestion && <CreateQuestion 
+          { showCreateUngroupedQuestion && <CreateQuestion
+            contributor={contributor} 
             toggleClose={toogleCreateUngroupedQuestion} 
             updateUI={updateUIonUngroupedTable}
             type={'ungroup'}/> }
 
-          {showEditUngroupedQuestion && <EditQuestion 
+          {showEditUngroupedQuestion && <EditQuestion
             handleClose={closeEditUngroupedQuestion}
             question={ungroupedQuestionToEdit}
             updateUI={updateUIonUngroupedTable}
@@ -433,7 +446,8 @@ function App() {
             updateTableUI={updateUIonGroupedTable}
             questionGroup={groupedQuestionToModify}/>}
 
-          {showCreateQuestionInGroup && <CreateQuestion 
+          {showCreateQuestionInGroup && <CreateQuestion
+            contributor={contributor} 
             toggleClose={toggleShowCreateQuestionInGroup} 
             updateUI={refreshQuestionsInQuestionGroup}
             updateTableUI={updateUIonGroupedTable}

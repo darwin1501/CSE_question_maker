@@ -33,7 +33,8 @@ recordRoutes.route("/question/add").post(function (req, response) {
     explanation: req.body.explanation,
     questionType: req.body.questionType,
     question: req.body.question,
-    dateModified: req.body.dateModified
+    dateModified: req.body.dateModified,
+    contributor: req.body.contributor
   };
   db_connect.collection("questions").insertOne(myobj, function (err, res) {
     if (err) throw err;
@@ -100,7 +101,8 @@ recordRoutes.route("/question/update/:id").post(function (req, response) {
       explanation: req.body.explanation,
       questionType: req.body.questionType,
       question: req.body.question,
-      dateModified: req.body.dateModified
+      dateModified: req.body.dateModified,
+      contributor: req.body.contributor
     },
   };
   db_connect
@@ -182,7 +184,8 @@ recordRoutes.route("/grouped-question/update/:id").post(function (req, response)
       referenceType: req.body.referenceType,
       groupName: req.body.groupName,
       questions: req.body.questions,
-      dateModified: req.body.dateModified
+      dateModified: req.body.dateModified,
+      contributor: req.body.contributor
     },
   };
   db_connect
