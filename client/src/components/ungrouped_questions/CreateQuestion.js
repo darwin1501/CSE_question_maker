@@ -3,6 +3,8 @@ import Checker from '../../utility_module/checker'
 import { nanoid } from 'nanoid'
 
 export default function CreateQuestion (props) {
+
+  const [hasExplanation, setHasExplanation] = React.useState(false);
   const [formData, setFormData] = React.useState({
     question: '',
     questionType: '',
@@ -62,9 +64,14 @@ export default function CreateQuestion (props) {
     event.preventDefault()
 
     // When a post request is sent to the create url, we'll add a new record to the database.
-    const newQuestion = { ...formData }
+
+    let copyOfFormData = { ...formData }
+
+    if(!hasExplanation){
+      copyOfFormData = { ...formData, explanation: "None" }
+    }
     const isQuestionExist = await Checker.hasQuestionDuplicate(
-      newQuestion.question
+      copyOfFormData.question
     )
 
     if (props.type === 'ungroup') {
@@ -73,13 +80,13 @@ export default function CreateQuestion (props) {
       } else {
         console.log('You may now create this question')
         // insert new question if there's no empty string in object properties
-        if (Checker.hasEmptyString(newQuestion) !== true) {
+        if (Checker.hasEmptyString(copyOfFormData) !== true) {
           await fetch('http://localhost:5000/question/add', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify(newQuestion)
+            body: JSON.stringify(copyOfFormData)
           }).catch(error => {
             window.alert(error)
             return
@@ -110,7 +117,7 @@ export default function CreateQuestion (props) {
     } else if (props.type === 'group') {
         const questionGroup = props.questionGroup
         // add _id property in formData that contains question data
-        const newQuestion = {...formData, questionType: props.questionGroup.questionType, _id:nanoid()}
+        const newQuestion = {...copyOfFormData, questionType: props.questionGroup.questionType, _id:nanoid()}
         const updatedQestion = [...questionGroup.questions, newQuestion]
         // copy old questions then add new one.
         const modifiedQuestionGroup = {...questionGroup, questions:updatedQestion}
@@ -128,6 +135,10 @@ export default function CreateQuestion (props) {
     } else {
       alert("Error: Can't identify question type")
     }
+  }
+
+  function handleCheckbox(){
+    setHasExplanation(!hasExplanation)
   }
 
   return (
@@ -236,6 +247,15 @@ export default function CreateQuestion (props) {
                     required
                   />
                 </label>
+                <label style={{margin: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
+                  Add Explanation?
+                  <input type="checkbox" 
+                          name="addExplanation" 
+                          checked={hasExplanation} 
+                          onChange={handleCheckbox}
+                          style={{padding: "40px", width: "25px", height: "25px"}}/>
+                </label>
+                {hasExplanation &&
                 <label className="flex flex-vertical">
                   Explantion
                   <textarea
@@ -246,6 +266,7 @@ export default function CreateQuestion (props) {
                     required
                   />
                 </label>
+                }
               </div>
            </div>
            

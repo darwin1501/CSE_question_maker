@@ -3,11 +3,29 @@ import Checker from '../../utility_module/checker';
 
 export default function EditQuestion(props) {
 
+  const [hasExplanation, setHasExplanation] = React.useState(false);
   let question = null;
   let questionsInQuestionGroup = null
   let selectedQuestion = null
-
   const questionType = props.type
+
+  React.useEffect(()=>{
+    // logic for displaying explanation for group and ungroup question
+    if(questionType === "ungroup"){
+      if(props.question.explanation ==="None"){
+        setHasExplanation(false)
+      }else{
+        setHasExplanation(true)
+      }
+    }else{
+      const question = questionsInQuestionGroup.filter( question=> question._id === props.questionID)[0]
+      if(question.explanation === "None"){
+        setHasExplanation(false)
+      }else{
+        setHasExplanation(true)
+      }
+    }
+  },[])
 
   if(questionType === "group"){
     questionsInQuestionGroup = props.questionGroup.questions
@@ -25,70 +43,73 @@ export default function EditQuestion(props) {
 
       const isQuestionExist = await Checker.hasQuestionDuplicate(formData.question);
       let updateThis = null;
+      let copyOfFormData = { ...formData }
 
-      if(questionType === "ungroup") {
-        // if question is not modified ignore duplicate checking
-        if(prevQuestion.question === formData.question){
+      if(!hasExplanation){
+        copyOfFormData = { ...formData, explanation: "None" }
+      }
+
+    if(questionType === "ungroup") {
+      // if question is not modified ignore duplicate checking
+      if(prevQuestion.question === formData.question){
+        updateThis = true;
+      }else{
+        if(isQuestionExist === true){
+          updateThis = false;
+        }else{
           updateThis = true;
-        }else{
-          if(isQuestionExist === true){
-            updateThis = false;
-          }else{
-            updateThis = true;
-          }
         }
-  
-        if(updateThis === true){
-          // This will send a post request to update the data in the database.
-          await fetch(`http://localhost:5000/question/update/${formData._id}`, {
-            method: "POST",
-            body: JSON.stringify(formData),
-            headers: {
-              'Content-Type': 'application/json'
-            },
-          });
-          alert("Question Updated");
-          props.updateUI();
-        }else{
-          alert("Error: Question Already Exists");
-        }
-      } else if(questionType === "group") {
-        // group update logic
+      }
 
-
-        // get the index of selected question
-        const indexOfSelectedQuestion = questionsInQuestionGroup.findIndex( question=> question._id === props.questionID)
-        // delete the selected question
-        const prevQuestionWithoutSelected = questionsInQuestionGroup.filter((question) => question._id !== props.questionID)
-
-        //logic for inserting replacing object within array
-        const insert = (arr, index, ...newItems) => [
-          // part of the array before the specified index
-          ...arr.slice(0, index),
-          // inserted items
-          ...newItems,
-          // part of the array after the specified index
-          ...arr.slice(index)
-        ]
-        // insert the updated question
-        const updatedQuestion = insert(prevQuestionWithoutSelected, indexOfSelectedQuestion, formData)
-        // update thhe properties of questions
-        const updatedQuestionGroup = {...props.questionGroup, questions: updatedQuestion}
-
-        // call an update
-        await fetch(`http://localhost:5000/grouped-question/update/${props.questionGroup._id}`, {
+      if(updateThis === true){
+        // This will send a post request to update the data in the database.
+        await fetch(`http://localhost:5000/question/update/${formData._id}`, {
           method: "POST",
-          body: JSON.stringify(updatedQuestionGroup),
+          body: JSON.stringify(copyOfFormData),
           headers: {
             'Content-Type': 'application/json'
           },
         });
         alert("Question Updated");
-
-        props.updateUI()
+        props.updateUI();
       }else{
-        alert("Error: can't identify question type")
+        alert("Error: Question Already Exists");
       }
+    } else if(questionType === "group") {
+      // group update logic
+      // get the index of selected question
+      const indexOfSelectedQuestion = questionsInQuestionGroup.findIndex( question=> question._id === props.questionID)
+      // delete the selected question
+      const prevQuestionWithoutSelected = questionsInQuestionGroup.filter((question) => question._id !== props.questionID)
+
+      //logic for inserting replacing object within array
+      const insert = (arr, index, ...newItems) => [
+        // part of the array before the specified index
+        ...arr.slice(0, index),
+        // inserted items
+        ...newItems,
+        // part of the array after the specified index
+        ...arr.slice(index)
+      ]
+      // insert the updated question
+      const updatedQuestion = insert(prevQuestionWithoutSelected, indexOfSelectedQuestion, copyOfFormData)
+      // update thhe properties of questions
+      const updatedQuestionGroup = {...props.questionGroup, questions: updatedQuestion}
+
+      // call an update
+      await fetch(`http://localhost:5000/grouped-question/update/${props.questionGroup._id}`, {
+        method: "POST",
+        body: JSON.stringify(updatedQuestionGroup),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+      alert("Question Updated");
+
+      props.updateUI()
+    }else{
+      alert("Error: can't identify question type")
+    }
   }
 
   function changeFormData(event) {
@@ -121,8 +142,10 @@ export default function EditQuestion(props) {
     }
   }
 
+  function handleCheckbox(){
+    setHasExplanation(!hasExplanation)
+  }
   
-
     return(
         <div>
             <div className="modal-container">
@@ -236,16 +259,27 @@ export default function EditQuestion(props) {
                                 required
                               />
                             </label>
-                            <label className="flex flex-vertical">
-                              Explantion
-                              <textarea
-                                value={formData.explanation}
-                                name='explanation'
-                                onChange={changeFormData}
-                                onBlur={formatFormData}
-                                required
-                              />
+                            <label style={{margin: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
+                              Add Explanation?
+                              <input type="checkbox" 
+                                      name="addExplanation" 
+                                      checked={hasExplanation} 
+                                      onChange={handleCheckbox}
+                                      style={{padding: "40px", width: "25px", height: "25px"}}/>
                             </label>
+                            {
+                              hasExplanation &&
+                              <label className="flex flex-vertical">
+                                Explantion
+                                <textarea
+                                  value={formData.explanation}
+                                  name='explanation'
+                                  onChange={changeFormData}
+                                  onBlur={formatFormData}
+                                  required
+                                />
+                              </label>
+                            }
                           </div>
                       </div>
                       <div className="flex flex-end" style={{marginTop: "20px"}}>
