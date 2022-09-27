@@ -159,7 +159,7 @@ export default function QuestionPreview () {
               }}
             />
           ) : (
-            <p>{questionReference}</p>
+            <p style={{whiteSpace: "pre-line"}}>{questionReference}</p>
           )}
         </div>
         <div
@@ -168,7 +168,7 @@ export default function QuestionPreview () {
             marginBottom: '20px'
           }}
         >
-          <p style={{ marginTop: '40px', marginBottom: '20px' }}>{question}</p>
+          <p style={{ marginTop: '40px', marginBottom: '20px', whiteSpace: "pre-line" }}>{question}</p>
         </div>
         <div className={`${PreviewStyle.flex_center}`}>
           <div
