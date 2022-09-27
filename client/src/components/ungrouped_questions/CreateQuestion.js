@@ -181,6 +181,7 @@ export default function CreateQuestion (props) {
                       <option value=''>---Select Category---</option>
                       <option value='Numerical'>Numerical</option>
                       <option value='Analytical'>Analytical</option>
+                      <option value='Clerical'>Clerical</option>
                       <option value='Verbal'>Verbal</option>
                       <option value='Philippine Constitution'>
                         Philippine Constitution

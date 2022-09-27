@@ -16,6 +16,7 @@ function App () {
     totalQuestions: 0,
     numerical: 0,
     analytical: 0,
+    clerical: 0,
     verbal: 0,
     philCon: 0,
     ra6713: 0,
@@ -26,6 +27,7 @@ function App () {
     totalQuestions: 0,
     numerical: 0,
     analytical: 0,
+    clerical: 0,
     verbal: 0,
     philCon: 0,
     ra6713: 0,
@@ -113,10 +115,15 @@ function App () {
         questions =>
           questions.questionType ==='Peace and Human Rights Issues and Concepts'
       ).length
+      const clericalCount = questions.filter(
+        questions =>
+          questions.questionType ==='Clerical'
+      ).length
       const questionsCount = {
         totalQuestions: totalQuestionCount,
         numerical: numericalCount,
         analytical: analyticalCount,
+        clerical: clericalCount,
         verbal: verbalCount,
         philCon: philConCount,
         ra6713: ra6713Count,
@@ -149,6 +156,7 @@ function App () {
       let totalQuestionCount = 0
       let numericalCount = 0
       let analyticalCount = 0
+      let clericalCount = 0
       let verbalCount = 0
       let philConCount = 0
       let ra6713Count = 0
@@ -213,11 +221,22 @@ function App () {
           question =>
             (humanRightsCount += Object.keys(question.questions).length)
         )
+      
+      questionGroup
+        .filter(
+          questions =>
+            questions.questionType === 'Clerical'
+        )
+        .forEach(
+          question =>
+            (clericalCount += Object.keys(question.questions).length)
+        )
 
       const questionsCount = {
         totalQuestions: totalQuestionCount,
         numerical: numericalCount,
         analytical: analyticalCount,
+        clerical: clericalCount,
         verbal: verbalCount,
         philCon: philConCount,
         ra6713: ra6713Count,
@@ -461,6 +480,10 @@ function App () {
               analytical={
                 ungroupQuestionsCount.analytical +
                 groupQuestionsCount.analytical
+              }
+              clerical={
+                ungroupQuestionsCount.clerical +
+                groupQuestionsCount.clerical
               }
               verbal={ungroupQuestionsCount.verbal + groupQuestionsCount.verbal}
               philCon={

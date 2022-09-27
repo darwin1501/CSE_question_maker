@@ -28,6 +28,10 @@ export default function Dashboard (props) {
           <p className={DashboardStyle.bold}>{props.analytical}</p>
         </div>
         <div className={DashboardStyle.flex}>
+          <p>Clerical:</p>{' '}
+          <p className={DashboardStyle.bold}>{props.clerical}</p>
+        </div>
+        <div className={DashboardStyle.flex}>
           <p>Verbal:</p> <p className={DashboardStyle.bold}>{props.verbal}</p>
         </div>
         <div className={DashboardStyle.flex}>
