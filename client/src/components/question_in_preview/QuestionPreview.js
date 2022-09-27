@@ -191,7 +191,7 @@ export default function QuestionPreview () {
             >
               Explanation
             </p>
-            <p>{explanation}</p>
+            <p style={{whiteSpace: "pre-line"}} >{explanation}</p>
           </div>
         )}
       </div>
