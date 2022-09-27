@@ -241,7 +241,10 @@ function App () {
     setContributor(value)
   }
 
-  function toogleCreateUngroupedQuestion () {
+  function toogleCreateUngroupedQuestion() {
+    if (contributor === "") {
+      alert("You haven't select any Contributor yet!")
+    }
     setShowCreateUngroupedQuestion(!showCreateUngroupedQuestion)
   }
 
@@ -429,7 +432,10 @@ function App () {
     setShowQuestionsInGroup(!showQuestionInGroup)
   }
 
-  function toggleShowCreateQuestionInGroup () {
+  function toggleShowCreateQuestionInGroup() {
+    if (contributor === "") {
+      alert("You haven't select any Contributor yet!")
+    }
     setShowCreateQuestionInGroup(!showCreateQuestionInGroup)
   }
 
